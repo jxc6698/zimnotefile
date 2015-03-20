@@ -1,0 +1,11 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-12-05T11:49:02+08:00
+
+====== DataparkSearch ======
+Created 星期五 05 十二月 2014
+
+DataparkSearch是一个用C语言实现的开源的搜索引擎. 其中网页排序是采用神经网络模型.  其中支持HTTP，HTTPS，FTP，NNTP等下载网页.包括索引引擎，检索引擎和中文分词引擎(这个也是唯一的一个开源的搜索引擎里有中文分词引擎).能个性化定制搜索结果，拥有完整的日志记录. 
+
+
+就是一个 lucene 在c上面的类似的类似的实现(由于是c可能效率略高)

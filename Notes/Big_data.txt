@@ -1,0 +1,101 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-11-17T19:29:59+08:00
+
+====== Big data ======
+Created 星期一 17 十一月 2014
+
+
+Apache Hadoop 实际上是一个可靠的,可拓展的分布式的计算环境
+
+
+
+雅虎的广告推送
+针对性更强
+要提供这些信息,雅虎需要从消费者的行为中获取更多的信息,例如针对性的网站,一天之内的访问次数,性别,年龄,位置和兴趣,并更根据这些信息为不同的消费者提供有针对性的信息,通过这一层次的分析,雅虎能够帮助广告客户快速找到他们的目标客户,以实现最佳的投资环境.
+
+
+要能够提高 平台的 数据库的性能, 提供更多的数据, 更低的延迟
+
+
+能够从hadoop 集群中抽取数据,并加载到一个第三方的数据库中,  多维数据集支持来自客户端, 如TAbleau Desktop业务分析软件 
+
+数据的高性能存储
+
+Hive是一个构建在hadoop 之上的数据仓库基础架构.
+
+最终 底层的软件要提供 更快地加载数据、处理更快速的查询
+
+
+big data technology: 
+hadoop 
+vertica
+mapreduce
+esper
+kdb
+ETL
+ECL
+
+Hive 
+scipy
+mahout
+matlab 
+revolution R
+SPSS
+AMPL
+SAS
+
+unsupervised learning
+social media analytics
+sentiment analysis
+predictive modeling
+BPO
+BI
+network analusis
+visualization
+
+
+Fast data 
+big analysis
+deep insight 
+
+
+工具: 云计算
+
+IaaS  Infrastructure as a service
+PaaS  platform
+SaaS  software
+
+
+
+需要 一个 分布式 aas 平台, 需要数据( when and where)
+需要 分布式的算法 	
+
+
+
+分布式系统:
+
+
+
+
+
+-fomit-frame-pointer
+
+梅西百货的实时定价机制
+Tipp24 AG针对欧洲博彩业构建的下注和预测平台。
+
+
+用户行为分析 , 偏好
+工厂对于设备状态的监测
+生产者通过社交网络获取用户体验
+商家根据用户的行为和交互,对用户细致的分类
+市场推广和广告 利用没
+医院分析药物 数据 和 病人的 信息来确认病人是否完全康复
+
+
+
+对大规模并行计算能力的支持   MPP
+parallel processing and into data into DBMS
+相关领域的知识 和 算法    A/B testing, crowdsourcing, data fusion and integration, genetic algorithms, machine learning, natural language processing, signal processing, simulation, time series analysis and visualisation. 
+
+

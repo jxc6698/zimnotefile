@@ -1,0 +1,343 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-12-16T12:06:35+08:00
+
+====== Go 语言语法总结 ======
+Created 星期二 16 十二月 2014
+
+
+
+
+
+Foo 作为 导出标记
+The swap function returns two strings 
+func swap(x, y string) (string, string) {
+	return y, x
+}
+也可以直接返回两个变量
+func split(sum int) (x, y int) {
+	x = sum * 4 / 9
+	y = sum - x
+	return
+}
+如果有了初始化,就可以不加类型名
+var c, python, java = true, false, "no!"
+可以用:= 代替var 来定义(初始化,initialize)
+c, python, java := true, false, "no!"
+基本类型
+ool
+
+string
+
+int  int8  int16  int32  int64
+uint uint8 uint16 uint32 uint64 uintptr
+
+byte // alias for uint8
+
+rune // alias for int32
+     // represents a Unicode code point
+
+float32 float64
+
+complex64 complex128
+
+参数式声明 factored declaration
+var (
+	ToBe   bool       = false
+	MaxInt uint64     = 1<<64 - 1
+	z      complex128 = cmplx.Sqrt(-5 + 12i)
+)
+
+初始化默认都是0值
+0 for numeric types,
+false the boolean type, and
+"" (the empty string) for strings.
+
+go 中 必要要强制类型转化,方法如下
+i := 42
+f := float64(i)
+u := uint(f)
+
+const 常量关键字,和c一样,不能用 := 来赋初值
+
+赋值的数值不可以超过类型的限制
+
+if 后面定义的变量的生存域只到 if 结束
+
+switch 每个分支结束都会结束,除非是以 fallthrough 结束,就是到下面一个分支
+
+go 中的swtch 中的变量可以是字符串
+
+defer 后面的函数在当前函数执行结束以后再执行,但是 传入这个函数的参数会在当前先计算出来
+
+defer 给出的函数 按照FILO 顺序执行
+
+go 大概不能对指针进行 数学运算
+
+type Vertex struct {
+	X int
+	Y int
+}
+
+type Vertex struct {
+	X, Y int
+}
+
+	v1 = Vertex{1, 2}  // has type Vertex
+	v2 = Vertex{X: 1}  // Y:0 is implicit
+
+数组
+var a [10]int
+
+len(a)
+
+slice 可以容易的形成一个新的slice 
+s[lo:hi]
+evaluates to a slice of the elements from lo through hi-1, inclusive. Thus
+
+s[lo:lo]
+is empty and
+
+s[lo:lo+1]
+has one element.
+
+构造一个 slice
+a := make([]int, 5)  // len(a)=5
+b := make([]int, 0, 5) // len(b)=0, cap(b)=5
+不太明白这里的 cap 是容量 capacity , 到底指什么
+length 指的是当前使用0 值初始化几个值,而capacity 指的是一共初始化多少容量
+append 是总当前的length处开始附加在后面的
+
+附加一个元素:
+func append(s []T, vs ...T) []T
+
+var a []int
+a = append(a, 0)
+
+
+
+range 就是遍历用的
+var pow = []int{1, 2, 4, 8, 16, 32, 64, 128}
+	for i, v := range pow {
+		fmt.Printf("2**%d = %d\n", i, v)
+	}
+可以获取 index 和 value
+for index, value := range pow
+
+
+
+map ,和python 中的字典类似(directory,dictionary)
+m = make(map[string]Vertex)
+	m["Bell Labs"] = Vertex{
+		40.68433, -74.39967,
+	}
+	fmt.Prin
+
+var m = map[string]Vertex{
+	"Bell Labs": {40.68433, -74.39967},
+	"Google":    {37.42202, -122.08408},
+}
+
+
+删除元素：
+
+delete(m, key)
+通过双赋值检测某个键存在：
+
+elem, ok = m[key]
+
+map[string]int{"x": 1}
+
+
+函数的闭包
+func adder() func(int) int {
+	sum := 0
+	return func(x int) int {
+		sum += x
+		return sum
+	}
+}
+
+func main() {
+	pos, neg := adder(), adder()
+	for i := 0; i < 10; i++ {
+		fmt.Println(
+			pos(i),
+			neg(-2*i),
+		)
+	}
+
+例子中,每个函数里面的sum都被绑定在各自的 sum上面了
+
+#########
+methods
+可以在结构体的基础上定义方法
+func (v *Vertex) Abs() float64 {
+	return math.Sqrt(v.X*v.X + v.Y*v.Y)
+}
+定义在结构v上的 Abs方法
+
+可以为自己定义的任何类型添加方法,只要在同一个包中
+type MyFloat float64
+
+func (f MyFloat) Abs() float64 {
+	if f < 0 {
+		return float64(-f)
+	}
+	return float64(f)
+}
+
+定义方法时可以使用  定义在指针上或者在不在指针上面, 如果在指针上就是引用原来的值,如果不在指针上,就是不是引用原来的值. 不过这个两种方法只能定义一个
+
+
+Interface 接口类型
+type Abser interface {
+	Abs() float64
+}
+可以把任何实现了接口里面的方法的类型赋值给接口类型
+要注意 如果方法定义在 指针上,就要赋指针值给接口类型
+
+
+type writer interface {
+      Write(b []byte) (n int, err error)
+  }
+      var w writer
+      w = os.Stdout
+      fmt.Fprintf(w, "hello world\n");
+
+Stringer 接口 定义在 fmt中
+type Stringer interface {
+    String() string
+}
+
+func (p Person) String() string {
+	return fmt.Sprintf("%v (%v years)", p.Name, p.Age)
+}
+在 fmt.Println( p )中可以看到效果
+
+
+type error interface {
+    Error() string
+}
+func run() error {
+	return &MyError{
+		time.Now(),
+		"it didn't work",
+	}
+}
+
+	if err := run(); err != nil {
+		fmt.Println(err)
+	}
+
+println 中传入的是  error 接口类型,所以会调用实现的 Error()方法
+
+
+io.Reader 接口实现了 Read 函数
+func (T) Read(b []byte) (n int, err error)
+err == io.EOF
+
+
+http 包的处理函数接口
+package http
+
+type Handler interface {
+    ServeHTTP(w ResponseWriter, r *Request)
+}
+
+
+图像处理基本库
+package image
+
+type Image interface {
+    ColorModel() color.Model
+    Bounds() Rectangle
+    At(x, y int) color.Color
+}
+
+image 库(真是艰难)
+package main
+
+import (
+	"code.google.com/p/go-tour/pic"
+	"image"
+	"image/color"
+)
+
+type Image struct{}
+
+func (im Image) Bounds() image.Rectangle {
+	return image.Rect(0,0, 100 ,100);
+}
+
+func (im Image) ColorModel() color.Model {
+	return color.RGBAModel
+}
+
+func (im Image) At(x,y int) color.Color {
+	return color.RGBA{ (uint8)(x),(uint8)(y),255,255 };
+}
+
+func main() {
+	m := Image{}
+	pic.ShowImage(m)
+}
+
+
+管道?
+channel  , buffered channel 
+ch := make(chan int, 100)
+
+close(c)
+
+range c  可以用 range 这种方法来处理
+
+select  
+		select {
+		case c <- x:
+			x, y = y, x+y
+		case <-quit:
+			fmt.Println("quit")
+			return
+		}
+哪个好了就读入哪个管道
+如果都ready了,那么就随便选择一个
+
+default 发生在 如果没有任何一个 channel 处于就绪的情况下
+		select {
+		case <-tick:
+			fmt.Println("tick.")
+		case <-boom:
+			fmt.Println("BOOM!")
+			return
+		default:
+			fmt.Println("    .")
+			time.Sleep(50 * time.Millisecond)
+		}
+
+
+
+go 的错误处理 : 主要依赖于 defer
+File, err := os.Open(filename)
+if( err != nil {
+	return;
+}
+defer file.Close()
+
+var mutex sync.Mutex
+mutex.Lock()
+defer mutex.Unlock()
+
+
+
+*interface{}  空接口类新可以指向任何类型
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,32 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-12-14T17:02:27+08:00
+
+====== tmux ======
+Created 星期日 14 十二月 2014
+
+
+git 查看远程仓库
+vim 查看历史命令 q:
+
+tmux new-session -s basic  或者  tmux new -s basic
+
+
+tmux 的配置文件 
+.tmux.conf
+
+
+为使配置生效，且避免重启tmux，可手动载入：
+按“prefix-:”进入命令模式，然后输入
+source-file [[~/.tmux.conf]]
+
+
+
+
+第一部分是总体的一些配置。首先解除了原来的prefix C-b，然后再对C-a进行了绑定。为了可以在tmux中而不是重新启动tmux这样的方式去重新载入配置文件（挺绕的），绑定了r用来重新载入配置文件。也就是说，当您修改了.tmux.conf，可以通过prefix-r来直接重载配置文件，而不用重启tmux。set -g default-terminal "screen-256color"用来使tmux界面不再那么寒碜。理论上，加了256color这一行会让tmux的界面变得和终端界面一样，但是也可能有例外情况—-比如死活没颜色之类的，这时候您可以试试 tmux -2是否有用，有用的话，您可以在您的bashrc里面加一行alias。最后那一行开启了终端铃—-tmux里面没有真正的铃声……
+
+第二部分是对基本窗口的重设。首先是让panel的序号从1开始，而不是默认的0。虽然对coding monkey来说，从0开始似乎更加自然。遗憾的是，在真正键盘上，0和1的距离到底还是太远了，远不如1和2来的方便。或许这也算一种妥协？后两句改变了分屏的快捷键—-|和-这两个键，对分屏这个操作而言，相当容易记忆。
+
+第三部分启用了鼠标，可以用鼠标来操作了。pragmatic tmux书里建议不要开启鼠标，毕竟键盘用熟了比鼠标来得会更快，但是我认为，初学的话，鼠标的使用还是很自然的。
+
+第四部分更改了panel跳转的键位和更改panel大小的键位—-这个键位对vimer应该是很熟的？当开启了很多panel的时候，使用prefix+hjkl来跳转panel，而大写的hjkl会更改panel大小，每次5个单位。

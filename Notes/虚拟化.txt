@@ -1,0 +1,14 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2015-01-20T14:00:19+08:00
+
+====== 虚拟化 ======
+Created 星期二 20 一月 2015
+
+
+how to study virtualization
+http://whatis.techtarget.com/reference/Virtualization-Learning-Guides
+
+
+
+

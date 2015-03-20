@@ -1,0 +1,12 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-12-05T12:32:33+08:00
+
+====== Galago ======
+Created 星期五 05 十二月 2014
+
+
+
+Galago是一个用java语言写的关于文本搜索的工具集. 其中包括索引引擎和查询引擎，还包括一个叫TupleFlow的分布式计算框架(和google的MapReduce很像).这个检索系统支持很多Indri查询语言. 
+
+

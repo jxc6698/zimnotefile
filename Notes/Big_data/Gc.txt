@@ -1,0 +1,46 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-12-03T18:36:52+08:00
+
+====== Gc ======
+Created 星期三 03 十二月 2014
+
+Go成功的项目
+nsq：bitly开源的消息队列系统，性能非常高，目前他们每天处理数十亿条的消息
+docker:基于lxc的一个虚拟打包工具，能够实现PAAS平台的组建。
+packer:用来生成不同平台的镜像文件，例如VM、vbox、AWS等，作者是vagrant的作者
+skynet：分布式调度框架
+Doozer：分布式同步工具，类似ZooKeeper
+Heka：mazila开源的日志处理系统
+cbfs：couchbase开源的分布式文件系统
+tsuru：开源的PAAS平台，和SAE实现的功能一模一样
+groupcache：memcahe作者写的用于Google下载系统的缓存系统
+god：类似redis的缓存系统，但是支持分布式和扩展性
+gor：网络流量抓包和重放工具
+
+
+Go 
+http://www.golangtc.com/static/download/packages/code.google.com.p.go.net.tar.gz
+
+
+godoc -http=:8000     http://localhost:8000
+
+hg 命令 sudo apt-get install mercurial
+
+一个go lang学习的网站
+http://tour.golang.org/welcome/1
+
+gofmt tools 貌似可以做 go 语言的语法渲染
+
+"code.google.com/p/go-tour/wc"
+import "code.google.com/p/go-tour/pic"
+"code.google.com/p/go-net/websocket
+code.google.com/p/go-tour/reader
+
+就需要主动调用Gosched()来让出CPU
+
+
+爬虫,获取网页的包
+github.com/codegangsta/martini
+
+

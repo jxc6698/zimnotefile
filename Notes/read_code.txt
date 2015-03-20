@@ -1,0 +1,55 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-10-14T16:59:01+08:00
+
+====== read code ======
+Created 星期二 14 十月 2014
+
+	struct page_referenced_arg pra = {
+		.mapcount = page_mapcount(page),
+		.memcg = memcg,
+	};
+	struct rmap_walk_control rwc = {
+		.rmap_one = page_referenced_one,
+		.arg = (void *)&pra,
+		.anon_lock = page_lock_anon_vma_read,
+	};
+
+
+进程
+pageout  
+rmap_item   item pool 的映射 
+
+
+
+
+try_to_unmap
+
+
+	struct rmap_walk_control rwc = {
+		.rmap_one = try_to_unmap_one,
+		.arg = (void *)flags,
+		.done = page_not_mapped,
+		.file_nonlinear = try_to_unmap_nonlinear,
+		.anon_lock = page_lock_anon_vma_read,
+	};
+	if (flags & TTU_MIGRATION && !PageKsm(page) && PageAnon(page))
+		rwc.invalid_vma = invalid_migration_vma;
+
+	anon_vma_interval_tree_foreach(avc, &anon_vma->rb_root, pgoff, pgoff) {
+		struct vm_area_struct *vma = avc->vma;
+		unsigned long address = vma_address(page, vma);
+
+		if (rwc->invalid_vma && rwc->invalid_vma(vma, rwc->arg))
+			continue;
+
+		ret = rwc->rmap_one(page, vma, address, rwc->arg);
+		if (ret != SWAP_AGAIN)
+			break;
+		if (rwc->done && rwc->done(page))
+			break;
+	}
+
+the Unity engine
+
+hugetlbfs page , normal page , transpartent huge page

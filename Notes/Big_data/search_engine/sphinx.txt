@@ -1,0 +1,26 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-12-05T12:09:03+08:00
+
+====== sphinx ======
+Created 星期五 05 十二月 2014
+
+Sphinx是一个用C++语言写的开源搜索引擎，也是现在比较主流的搜索引擎之一，在建立索引的事件方面比Lucene快50%，但是索引文件比Lucene要大一倍，因此Sphinx在索引的建立方面是空间换取事件的策略，在检索速度上，和lucene相差不大，但检索精准度方面Lucene要优于Sphinx，另外在加入中文分词引擎难度方面，Lucene要优于Sphinx.其中Sphinx支持实时搜索，使用起来比较简单方便. 
+
+
+仍然在更新
+
+类似 lucene的搜索引擎
+
+Key features
+http://sphinxsearch.com/about/sphinx/
+Batch and Real-Time full-text indexes. Two index backends that support both efficient offline index construction andincremental on-the-fly index updates are available.
+Non-text attributes support. An arbitrary number of attributes (product IDs, company names, prices, etc) can be stored in the index and used either just for retrieveal (to avoid hitting the DB), or for efficient Sphinx-side search result set post-processing.
+SQL database indexing. Sphinx can directly access and index data stored in MySQL (all storage engines are supported), PostgreSQL, Oracle, Microsoft SQL Server, SQLite, Drizzle, and anything else that supports ODBC.
+Non-SQL storage indexing. Data can also be streamed to batch indexer in a simple XML format called XMLpipe, or inserted directly into an incremental RT index.
+Easy application integration. Sphinx comes with three different APIs, SphinxAPI, SphinxSE, and SphinxQL. SphinxAPI is a native library available for Java, PHP, Python, Perl, C, and other languages. SphinxSE, a pluggable storage engine for MySQL, enables huge result sets to be shipped directly to MySQL server for post-processing. SphinxQL lets the application query Sphinx using standard MySQL client libary and query syntax.
+Advanced full-text searching syntax. Our querying engine supports arbitrarily complex queries combining boolean operators, phrase, proximity, strict order, and quorum matching, field and position limits, exact keyword form matching, substring searches, etc.
+Rich database-like querying features. Sphinx does not limit you to just keyword searching. On top of full-text search result set, you can compute arbitrary arithmetic expressions, add WHERE conditions, do ORDER BY, GROUP BY, use MIN/MAX/AVG/SUM, aggregates etc. Essentially, full-blown SQL SELECT is supported.
+Better relevance ranking. Unlike many other engines, Sphinx does not solely rely on 30-year-old statistical ranking that only considers keyword frequencies, nor limits you to it. By default, Sphinx additionally analyzes keyword proximity, and ranks closer phrase matches higher, with perfect matches ranked on top. Also, ranking is flexible: you can choose from a number of built-in relevance functions, tweak their weights by using expressions, or develop new ones.
+Flexible text processing. Sphinx indexing features include full support for SBCS and UTF-8 encodings (meaning that effectively all world's languages are supported); stopword removal and optional hit position removal (hitless indexing); morphology and synonym processing through word forms dictionaries and stemmers; exceptions and blended characters; and many more.
+Distributed searching. Searches can be distributed across multiple machines, enabling horizontal scale-out and HA (High Availability).

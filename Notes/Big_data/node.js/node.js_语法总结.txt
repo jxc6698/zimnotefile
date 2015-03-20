@@ -1,0 +1,113 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-12-28T17:21:16+08:00
+
+====== node.js 语法总结 ======
+Created 星期日 28 十二月 2014
+
+
+process.cwd(); 获取当前路径
+console.log( process.cwd() );
+
+改变当前目录的路径
+process.chdir("目录");
+
+
+console.log() 就是
+
+process.stdout 是标准输出流
+console.log = function(d){
+    process.stdout.write(d+'\n');
+}
+
+process.stderr 是标准错误流
+process.stderr.write(输入内容);
+
+
+标准输入流
+process.stdin.on('readable', function() {
+  var chunk = process.stdin.read();
+  if (chunk !== null) {
+    process.stdout.write('data: ' + chunk);
+  }
+});
+
+杀死进程,退出程序
+process.exit(code);
+code是程序推出后的返回值
+
+
+为stdout注册 data事件,就可以拿到它的信息
+process.stdout.on('data',function(data){
+   console.log(data);
+});
+
+
+设置编码 如utf8
+process.stdin.setEncoding(编码);
+
+process.stdout.setEncoding(编码);
+
+process.stderr.setEncoding(编码);
+
+node.js编码格式只支持UTF8、ascii、base64，暂时不支持GBK、gb2312。
+
+
+异步的将数据写入文件
+var fs= require("fs");
+
+fs.writeFile('test.txt', 'Hello Node', function (err) {
+   if (err) throw err;
+   console.log('Saved successfully'); //文件被保存
+});
+
+添加内容
+var fs= require("fs");
+
+fs.appendFile('test.txt', 'data to append', function (err) {
+   if (err) throw err;
+     
+    //数据被添加到文件的尾部
+    console.log('The "data to append" was appended to file!'); 
+});
+
+判断文件存在
+var fs= require("fs");
+
+fs.exists(文件名, function(exists) {
+	console.log(exists?"exist" : "not exist");
+});
+
+rename 函数
+var fs= require("fs");
+
+fs.rename(旧文件，新文件，回调函数(err){
+   if (err) throw err;
+   console.log('Successful modification,');
+});
+
+
+readFile 函数
+var fs = require('fs');
+
+fs.readFile(文件名,编码, function (err, data) {
+  if (err) throw err;
+  console.log(data);
+});
+如果不加编码, 就会读会 <Buffer 68 65 6c 6c 6f 20 4e 6f 64 65 64 61 74 61 20 74 6f 20 61 70 70 65 6e 64> 这种东西
+
+删除 unlink:  fs.unlink(文件,回调函数(err));
+var fs = require('fs');
+
+fs.unlink(文件, function(err) {
+  if (err) throw err;
+  console.log('successfully deleted');
+});
+
+
+mkdir 函数: fs.mkdir(路径，权限，回调函数(err));
+rmdir  函数: fs.rmdir(路径 , 回调函数(err));
+
+readdir: fs.readdir(目录,回调函数(err,files));
+files 是文件名数组, 不包含.和..
+

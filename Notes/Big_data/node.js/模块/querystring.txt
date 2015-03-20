@@ -1,0 +1,41 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2015-01-05T19:41:07+08:00
+
+====== querystring ======
+Created 星期一 05 一月 2015
+
+
+stringify函数的作用就是序列化对象，也就是说将对象类型转换成一个字符串类型（默认的分割符（“&”）和分配符（“=”）），本节先介绍它的基本用法，在下一节里我们将学习如何替换默认分配符，下面我们就通过以下例子来清楚的认识一下吧！
+
+var querystring= require('querystring');
+
+var result = querystring.stringify({foo:'bar',cool:['xux', 'yys']});
+
+console.log(result);
+
+
+
+刚刚我们已经学习了stringify函数的作用，接下来就来学习反序列化函数——parse函数，parse函数的作用就是反序列化字符串（默认是由“=”“&”拼接而成），转换得到一个对象类型.如下示例：
+var querystring = require('querystring');
+
+var result = querystring.parse('foo=bar&cool=xux&cool=yys');
+
+console.log(result);
+
+parse 三个参数
+querystring.parse(“字符串”，“分隔符”，“分配符”)  = &
+
+var querystring = require('querystring');
+
+var result = querystring.parse('foo@bar$cool@xux$cool@yys','@','$');
+
+console.log(result);
+
+
+
+
+
+
+
+

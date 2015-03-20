@@ -1,0 +1,14 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-12-01T09:44:50+08:00
+
+====== 软件工具 ======
+Created 星期一 01 十二月 2014
+
+
+Baile:
+please check Balie, an open source NLP software that uses Weka for language identification and sentence boundary recognition tasks
+
+
+git 
+git rm -r --cached .

@@ -1,0 +1,40 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-11-28T11:17:18+08:00
+
+====== 会议 ======
+Created 星期五 28 十一月 2014
+
+A 类别
+ASPLOS
+
+B 类别:
+VEE
+
+USENIX ATC:
+USENIX Annual Technical Conference: 
+(搜索的 memory deduplication)
+Konrad Miller, Fabian Franz, Marc Rittinghaus, Marius Hillenbrand, Frank Bellosa: XLH: More Effective Memory Deduplication Scanners Through Cross-layer Hints. USENIX Annual Technical Conference 2013:279-290
+
+C 类别:
+
+NOCS:  感觉是网络居多啊 , 
+IF:  网络 , 系统 ,  SDN
+ASP-DAC:  感觉这个主要是以片子 和 硬件交互为主
+ASAP:  
+International Conference on Application-Specific Systems, Architectures and Processors,
+关于...
+ISCAS:
+International Symposium on Circuits and Systems
+
+
+HPCC: IEEE international Conference on High Performance computing and communication
+貌似可以的,搜索ksm的时候,发现一篇相关
+
+HiPC: International Conference on High Performance Computing
+感觉也可以的哇,也有类似的
+
+IFSA
+
+
+

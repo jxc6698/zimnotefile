@@ -1,0 +1,36 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-12-08T21:50:43+08:00
+
+====== 问题 ======
+Created 星期一 08 十二月 2014
+
+
+question:
+Ques.1. 在 popup.html 中如何使用中文
+
+Ques.2. 部分情况会禁止跨域?  Origin null is not allowed by Access-Control-Allow-origin.
+chrome 允许浏览器跨域    chrome.exe --allow-file-access-from-files
+
+Ques.3. content_script.js, popup.js, background.js 相互通信问题  ( SOLVED )
+
+Ques.4. background.html 可不可以渲染出来,还是只能通过debug 界面调试它
+Ques.5: chrome.tabs.create 的callback函数的执行环境和时间,
+
+
+answer:
+Answer.1. 
+Answer.2. 
+
+Answer.3. 因为content_script.js 和 popup.js, background.js不在一个运行环境中,所以content_script.js发送给 background.js 要通过 chrome.runtime.sendMessage() 发消息, 而 background.js发送给 content_script.js, 要通过 chrome.tabs.sendMessagek(tag.id, messabge, ) 这种方式
+在background.js中可以通过 chrome.extensions.getViews('type':'popup');来获得 popup.html的window对象,来操作popup.html, 获取这个对象的前提条件是要先打开popup.html,所以需要popup.js 发送消息给background.js.
+总结如下: background.js 可以直接做做 popup.html, popup.js 只是要在popup.html打开时通知一下background.js. content_script.js可以操作源网页,但是与background.js通信需要发消息
+
+Answer.4. 
+
+
+Answer.5.  callback的运行环境是在 调用create的地方,就是background.js, 执行callback是在实际创建完,不会影响到 chrome.tabs.create 的结束 , 并且这个 函数是闭包的, 就是可以在函数中访问外层函数的局部变量
+
+
+
+

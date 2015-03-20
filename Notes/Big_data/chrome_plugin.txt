@@ -1,0 +1,29 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-12-07T14:04:19+08:00
+
+====== chrome plugin ======
+Created 星期日 07 十二月 2014
+
+manifest.json
+
+content script
+
+
+popup( html, script )**n**
+
+background scripte
+
+
+content script 不能直接访问页面原本的脚本
+
+官方资料
+https://developer.chrome.com/extensions/index.html
+例子
+**n**n
+
+
+executeScript −  excute javascript
+
+
+http://www.golangtc.com/static/download/packages/code.google.com.p.go.net.tar.gz

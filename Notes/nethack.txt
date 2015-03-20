@@ -1,0 +1,33 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-11-06T10:46:24+08:00
+
+====== nethack ======
+Created 星期四 06 十一月 2014
+
+nethack 游戏
+
+chaotic 混沌的,无序的
+Neutral 
+
+rogue 流氓,飞贼
+rhizotomist  ???   
+
+wield 使用
+
+
+armor  盔甲
+sack 麻袋
+obsidian  黑曜石
+
+
+dungeon  地牢
+
+
+blessed 
+uncursed
+cursed
+物品
+candelabrum of invocation 召唤烛台
+
+

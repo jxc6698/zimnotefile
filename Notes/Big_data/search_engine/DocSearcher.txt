@@ -1,0 +1,11 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-12-04T14:51:59+08:00
+
+====== DocSearcher ======
+Created 星期四 04 十二月 2014
+
+
+DocSearcher 是一个基于文档全文搜索的搜索引擎,
+采用Lucene，POI Apache APIs以及PDF Box API等Java开源项目
+支持搜所 HTML, MS Word, MS Excel, RTF, pdf, Open office(Star office), Text

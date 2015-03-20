@@ -1,0 +1,20 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-10-17T11:42:57+08:00
+
+====== notice ======
+Created 星期五 17 十月 2014
+
+
+
+
+(一)
+可能的临界区  
+在拿到  rmap_list_entry 后,需要进行, 申请 rmap_item 的过程,所以需要进行,  可能多个进程同时申请,出现 丢失 一个rmap_item
+(二)
+在 sort_rmap_entry_list的时候,不能释放,从 shrink_page_list中申请的 rmap_list_entry 
+
+
+
+
+

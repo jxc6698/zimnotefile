@@ -1,0 +1,37 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-09-12T15:29:35+08:00
+
+====== main ======
+Created 星期五 12 九月 2014
+
+
+
+
+
+commit acbbe6fbb240a927ee1f5994f04d31267d422215
+Author: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Date:   Tue Sep 9 14:51:01 2014 -0700
+
+    kcmp: fix standard comparison bug
+
+
+
+commit n**8542bdfc6632b55aa1cf4fa255283c878b662499**
+Author: Sasha Levin <sasha.levin@oracle.com>
+Date:   Tue Sep 9 14:50:59 2014 -0700
+
+    mm/mmap.c: use pr_emerg when printing BUG related information
+    
+    Make sure we actually see the output of validate_mm() and browse_rb()
+    before triggering a BUG().  pr_info isn't shown by default so the reason
+    for the BUG() isn't obvious.
+    
+    Signed-off-by: Sasha Levin <sasha.levin@oracle.com>
+    Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+    Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+
+commit b01d072065b6f36550f486fe77f05b092225ba1b
+
+
+

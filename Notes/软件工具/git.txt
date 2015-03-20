@@ -1,0 +1,15 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2015-03-12T21:31:09+08:00
+
+====== git ======
+Created 星期四 12 三月 2015
+
+git archive --format tar publish > chrome-crawler.tar  生成压缩包
+
+
+git ls-tree -r master --name-only
+git ls-tree -r master
+查询master 分支tracked file list
+
+git rm --cached  从tracked files中删除

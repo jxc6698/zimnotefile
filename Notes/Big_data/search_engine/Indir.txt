@@ -1,0 +1,11 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-12-05T12:29:59+08:00
+
+====== Indir ======
+Created 星期五 05 十二月 2014
+
+从lemur发展而来的搜索引擎
+
+在windows 环境下可以处理 word 和 excel 的数据
+ 

@@ -1,0 +1,13 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2015-03-22T16:59:11+08:00
+
+====== jQuery ======
+Created 星期日 22 三月 2015
+
+$('.class').each( function( index) {
+});
+
+$('.class').find( '.class2')  : find 进一步筛选
+
+

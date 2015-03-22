@@ -1,0 +1,182 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2013-12-27T13:36:52+08:00
+
+====== 计算时间的方法 ======
+Created Friday 27 December 2013
+
+swap_entries  4411
+free_entry_item  4440
+
+
+
+setup_uksm_zero_page(void) ;
+初始化  0页(empty_uksm_zero_page) 和 uksm_zero_pfn 
+
+
+
+uksm.h
+uksm_unmap_zero_page
+	__dec_zone_page_state
+
+uksm_map_zero_page
+	__inc_zone_page_state
+	
+	
+cow : copy on write
+
+P  666
+
+
+P 1721
+scan_rung 结构体
+uksm_scan_ladder[]   array of all scan_rung
+SCAN_LADDER_SIZE  4
+
+1915
+many data difined in 1930 - 1950
+
+
+
+
+有两个宏定RUN_STOP
+UKSM_RUN_MERGE
+变量 uksm_run = 1 初始 为 1
+
+
+hash strength 是指什么  p 2000 ， 这里有很多
+
+uksm_calc_rung_step    //  4760
+
+vma_rung_up  //  4933   提高扫描级别
+vma_rung_down  // 4944
+
+scan_rung
+
+
+judge_slot   p 5776  // 确定是否要 提高级别
+
+
+主调用函数  
+uksm_init       p  6982
+uksm_scan_thread      p  4623
+uksm_do_scan     p  5823  // scan worker function
+ 
+uksm_do_scan        p   5821
+-->   scan_vma_one_page     p   5922
+-->   -->   cmp_and_merge_page     p   4169   //  进行主要merge 的操作
+
+
+
+break_cow  
+break_ksm       p  2598  
+
+
+
+
+advance_current_scan    p  4831
+
+
+
+
+
+
+可能用于估算 page hash 的函数（ 总之看不懂 ）
+
+cal_positive_negative_cost     p   6773
+
+
+ema   p  5577  不知到这个函数是计算什么的
+
+uksm_ema_page_time
+
+
+
+uksm_calc_scan_pages      会根据允许占用cpu 的时间 和扫描一页所需要的时间（这个应该已经是算好的了，保存在变量uksm_ema_page_time中）
+
+-----------------------------
+下面我想要找到计算uksm_ema_page_time 这个变量的位置，并且找出计算它依赖哪些变量，同时找到采样扫描和进行合并的时机，就是这两件时间都是在uksmd这个内核线程中完成的，但是总有先后吧，感觉不应该是一边扫描一边合并
+
+
+在  p  6000
+对usm_ema_page_time 赋值了，用到了  变量  delta_exec  和 vpages 。（delta_exec 感觉好像是扫描一次的时间 = end_time - start_time ）
+使用变量  uksm_ema_page_time 的位置，  reset_current_scan，
+和  uksm_calc_scan_pages 
+reset_current_scan 在 rung从有到空 和 从空到有 时会被调用
+uksm_calc_scan_pages 则是要使用uksm_ema_page_time来计算的，根据这个rung有多少cpu时间，有多少页面，扫描一个页面的速度。这里就是在使用之前检查一下，免得值太大或者太小
+
+
+修改  uksm_ema_page_time  位置， uksm_calc_scan_pages  ， uksm_do_scan  
+
+我觉得估算的时间是   扫描加合并的时间  （ 不明白为什么要这样 ）
+
+---------------------------------
+
+搞明白   uksm_cpu_preset[]    数组中存的数据含义
+
+预置数据 一些 cpu_ratio 和  cover_msecs 的参数 
+
+
+
+
+
+----------------------------------
+
+
+uksm_do_scan  函数最后面，最后计算的时间, 
+
+
+uksm_enter_all_slots    添加 vma 的slot，同时进一步添加进入链表中
+---->  uksm_vma_enter
+
+uksm_calc_scan_page    计算步长  , 还有一些睡眠时间 的变量
+
+
+
+-------------------------------------
+
+
+sleep_time
+
+
+在进行压缩的之前，dump 住，唤醒uksm进行压缩，并且考虑是否要让uksm进行加速。
+
+swap_out   会有同步和异步，  异步的话挂机不太合适，加速比较好
+
+
+1。尝试调整 uksm 参数 ，记录每个参数的具体作用
+2。深入分析  可能触发 换页的地方。
+3。思考如何  挂起，如何唤醒 uksm，并需要记录什么信息
+
+
+
+---------------------------------
+针对以上目标，   uksm_cpu_preset_s  的结构的  uksm_cpu_preset[4]       p  1949
+
+
+2014-3-3
+下面一步的工作：在各个函数内检测   rung->cpu_ratio 是否为 负值（根据代码这是可以的），这里的cpu_ratio 是怎么算出来的，当前的代码路径下面有没有方法可以修改它
+
+2014-3-9
+发现在简单的使用过程中不会调用vma_rung_up这个函数，也就是说所有的页面都在最低级的合并标准里面，准备运行同一个程序多次来检查是否会调用到vma_rung_up
+
+第一次出现的调用vma_rung_up的位置，4066
+
+分析函数  round_update_ladder 的作用（调用了vma_rung_up)
+judge_slot  : 4366
+
+
+2014-3.10  
+重新追踪一下代码路径，在函数swap_writepage中，调用__swap_writepage 前调用了 frontswap_store ，__swap_writepage 就是进行 bio 的主体 
+
+
+2014-3-13
+最近在分析比较合适的位置，已经如何区分  同步和异步  ，同步和异步好像都调用了  shrink_cache    ，现在我觉得还是在   调用frontswap 前面这个点调用  来进行我的操作。  
+
+我觉得区分同步和异步的方法 就是 判断  是否是  kswapd  线程 。
+
+
+
+
+
+beautiful soap

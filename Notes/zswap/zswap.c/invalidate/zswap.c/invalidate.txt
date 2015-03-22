@@ -1,0 +1,27 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2013-11-04T10:46:08+08:00
+
+====== invalidate ======
+Created Monday 04 November 2013
+
+
+
+frontswap_invalidate_area
+
+swapoff    :  swapfile.c  :  1575   是个系统调用
+
+
+
+frontswap_invalidate_page
+
+swap_entry_free  :   565      swapfile.c
+
+
+
+
+
+
+
+
+

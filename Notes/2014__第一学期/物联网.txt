@@ -1,0 +1,14 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-11-10T14:07:23+08:00
+
+====== 物联网 ======
+Created 星期一 10 十一月 2014
+
+
+RFID
+
+传感器
+
+gettimeofday() 
+

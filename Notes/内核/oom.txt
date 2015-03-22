@@ -1,0 +1,65 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-06-16T11:21:12+08:00
+
+====== oom ======
+Created Monday 16 June 2014
+
+mm/oom_kill.c
+include/linux/oom.h
+
+// must be called while holding a reference of process p 
+oom_kill_process   P  414  
+
+
+
+task_lock() task_unload()  保护 task->comm ....
+
+read_lock( &tasklist_lock ) ;
+
+
+
+
+
+由什么时候触发
+oom_kill_process
+	memcontrol.c    	mem_cgroup_out_of_memory
+	oom_kill.c   		out_of_memory
+
+out_of_memory 
+	oom_kill.c 	  	 pagefault_out_of_memory  
+	page_alloc.c		 __alloc_pages_may_oom 
+	drivers/tty/sysrq.c      moom_callback
+	
+pagefault_out_of_memory
+	arch/x86/mm/fault.c    mm_fault_error		  
+
+mm_fault_error 
+	arch/x86/mm/fault.c    __do_page_fault
+
+mem_cgroup_out_of_memory
+	mm/memcontrol.c 	  mem_cgroup_oom_synchromize
+
+
+schedule_timeout_killable( 1 ) ;
+
+由哪些主要的函数
+	out_of_memory
+	oom_kill_process 
+	select_bad_process
+
+	杀死进程主要使用的是  do_send_sig_info 来实现
+	计算杀死的优先级   	oom_badness
+
+进行了什么处理，功能
+	首先检查是否要杀死自己，否则挑选最坏（bd）的进程，杀死
+	
+	out_of_memory
+	
+	oom_kill_process
+
+	pagefault_out_of_memory 
+		对zone 加上标志为，同时以此检查是不是已经有oom kill 正在运行
+
+
+

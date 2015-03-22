@@ -1,0 +1,27 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-06-16T11:21:03+08:00
+
+====== 内核 ======
+Created Monday 16 June 2014
+
+Page sharing 是一种整页面合并，uksm 也是这样的，是否可以采用讲所有页面划分承半个页面的方式来进行合并呢，即使Half page sharing。
+
+
+printf("hello world\n");
+具体的草所``
+
+随手看到了 我的系统中运行着一个这样的进程，叫做 rcuos/4
+
+
+
+进行了direct path后不必要进行 frontswap ,  和 bio
+
+page -> pte 释放所有的映射，
+
+page的释放路径：是释放page struct , 就是全部释放所有的路径，vma-> page 
+
+
+
+
+

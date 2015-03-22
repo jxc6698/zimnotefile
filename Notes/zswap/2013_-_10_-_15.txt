@@ -1,0 +1,27 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2013-10-15T15:57:38+08:00
+
+====== 2013 - 10 - 15 ======
+Created Tuesday 15 October 2013
+
+由于有4个核 
+在不断的触发 __do_page_fault
+
+不知到我要的那个 __do_page_fault是在哪个核上面
+
+解决办法是  条件断点
+
+TLB 是每个 线程一个  ， 还是没每个 核一个  还是整个cpu 一个
+
+TLB 和 L1  cache 的位置关系 
+一般会认为是    先 tlb ， 再 L1  cache 
+
+
+
+
+
+
+
+
+

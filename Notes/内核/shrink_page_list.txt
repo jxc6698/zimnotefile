@@ -1,0 +1,53 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-09-20T00:21:41+08:00
+
+====== shrink page list ======
+Created 星期六 20 九月 2014
+
+
+
+这里还涉及到 unmap page 的函数，try_to_unmap
+
+
+
+unmap  remove pte
+remove mapping 
+
+
+	struct rmap_walk_control rwc = {
+		.rmap_one = try_to_unmap_one,
+		.arg = (void *)flags,
+		.done = page_not_mapped,
+		.file_nonlinear = try_to_unmap_nonlinear,
+		.anon_lock = page_lock_anon_vma_read,
+	};
+
+	if (flags & TTU_MIGRATION && !PageKsm(page) && PageAnon(page))
+		rwc.invalid_vma = invalid_migration_vma;
+
+
+
+page_check_reference() 内存的逻辑
+它的功能大概是 检查这个页面是否被访问过，这个时候页面有机会回到 active list 中，（二次机会）
+a.page被访问
+b.orer 小于3
+c.page_mapping_inuse 检查
+？？
+
+
+
+SetPageReclaim   -> arch/x86/include/asm/bitops.h  constant_test_bit
+variable_test_bit
+
+
+
+
+
+
+
+
+
+
+
+

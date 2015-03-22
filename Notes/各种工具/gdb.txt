@@ -1,0 +1,22 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-09-09T21:25:50+08:00
+
+====== gdb ======
+Created 星期二 09 九月 2014
+
+
+b [[xxx.c:xxx]]   if cond
+
+bt 
+f 1
+p  
+
+
+
+db 使用技巧
+
+bt   当前函数调用栈
+ f  1   当前函数调用栈的第一层
+info thread    查看当前够有几个  thread   
+thread    1    查看 1 号 thread  的当前执行的位置

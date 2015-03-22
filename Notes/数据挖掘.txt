@@ -1,0 +1,11 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-06-06T14:12:53+08:00
+
+====== 数据挖掘 ======
+Created Friday 06 June 2014
+
+
+有什么方法可以发现某一类别对哪些特征敏感
+
+

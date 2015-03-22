@@ -1,0 +1,43 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-12-09T10:33:37+08:00
+
+====== linux 写入终端 ======
+Created 星期二 09 十二月 2014
+
+
+
+
+b fs/read_write.c:526 if fd == 1
+fs/read_write.c
+
+vfs_write ===>  do_sync_write / flie->f_op->write
+进入了 file->f_op->write 就是 [[do_sync_write(read_write.c:423]]) ??? 此时这两个 指向同一个函数
+
+do_sync_write ⇒ filp->f_op->aio_write
+就是 generic_file_aio_write
+
+pipe_write  fs/pipe.c496
+
+generic_file_aio_write(mm/filemap.c:2540)
+⇒ __generic_file_aio_write
+⇒ generic_file_direct_write (mm/filemap.c:  ) /   generic_file_bufered_write  (mm/filemap.c: 2393 ) /  
+⇒ generic_perform_write (mm/filemap.c: 2301 )
+
+
+ext3_write_begin  fs/ext3/inode.c 1250
+
+PTA
+
+
+
+
+
+
+
+
+
+b fs/read_write.c:526 if fd == 1
+p file
+b generic_perform_write
+p file

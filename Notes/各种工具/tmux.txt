@@ -1,0 +1,33 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-09-15T10:07:42+08:00
+
+====== tmux ======
+Created 星期一 15 九月 2014
+
+
+
+
+tmux 的使用
+启动  tmux -2
+
+C + b    控制模式
+%  左右分栏
+"     上下分栏
+c    创建窗口
+n,p   窗口间切换
+o,或者方向键    窗口内部小窗口之间切换 
+x     关闭当前的小窗口
+w    通过上下键来选择哪个会话
+
+复制粘贴，　
+C + b [  进入复制模式，空格开始选择，enter结束选择，C + b ]粘贴
+
+tmux ls 查看所有的tmux 列表
+tmux attach-session -t 0  
+
+&  推出当前窗口
+d   临时断开会话
+s   查看所有的tmux 列表
+
+

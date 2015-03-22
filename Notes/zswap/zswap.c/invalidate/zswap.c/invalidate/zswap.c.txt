@@ -1,0 +1,95 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2013-10-22T17:26:06+08:00
+
+====== zswap.c ======
+Created Tuesday 22 October 2013
+
+
+
+
+有个全局变量   zswap_trees[  ]   是个数组   有哪些type
+
+
+kmap_atomic( page )
+kunmap_atomic( page )
+
+
+rb_erase(    ) ;    remove from  rb tree
+
+
+zswap_frontswap_store
+
+zswap_frontswap_load
+
+
+zswap_free_entry(  tree , entry ) 
+
+op : ZSWAP_COMPOP_COMPRESS     ZSWAP_COMPOP_DECOMPRESS
+zswap_comp_op               
+
+
+
+
+
+
+kzmalloc       
+
+
+
+		entry = rb_entry(node, struct zswap_entry, rbnode);
+		rb_erase(&entry->rbnode, &tree->rbroot);
+		zbud_free(tree->pool, entry->handle);
+		zswap_entry_cache_free(entry);
+		atomic_dec(&zswap_stored_pages);
+
+
+
+
+
+
+ shrink_caches    
+
+
+
+
+
+在在patch 文件没有看到过修改过这样两个文件
+
+zswap 的入口 在 mm/frontswap.c : 235    __frontswap_store
+zswap 的出口 在 mm/frontswap.c : 276    __frontswap_load
+
+这里使用了 frontswap的旧有机制， 这个补丁在2013-4-30  15:26:51 2013  进去的，做了修改主要是把 全局变量变成了全局指针， （ 还没有查看 以前的功能  ， 
+commit 1e01c968db3d0aebd48e31db15f24516b03128df
+
+前一个commit 
+commit 905cd0e1bf9ffe82d6906a01fd974ea0f70be97a
+
+这个机制frontswap 的机制  frontswap_ops 变量指向了所有的函数（   用了 frontswap  的自带接口）
+结构体叫 frontswap_ops
+替换了原来的方法，原来的方法 是 tmem_frontswap_ops
+
+
+在往外面是 mm/page_io.c  : 240     swap_writepage
+
+
+mm/shmem.c : 870    shmem_writepage 
+
+
+mm/vmscan.c : 429      pageout
+struct address_space   ?
+
+
+
+mm/page-writeback.c:1891    __writepage
+
+
+
+
+mm/page-writeback.c : 1829    write_cache_pages
+
+mm/page-writeback.c : 1903    generic_writepages 
+
+fs/fs-writeback.c : 465    __writeback_single_inode 
+
+

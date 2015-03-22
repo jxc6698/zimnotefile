@@ -1,0 +1,8 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2013-11-12T15:01:05+08:00
+
+====== frontswap.c ======
+Created Tuesday 12 November 2013
+
+29f233cfffe7fbc6672938117ce7e4154a2f515f

@@ -1,0 +1,22 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-09-15T19:31:05+08:00
+
+====== git ======
+Created 星期一 15 九月 2014
+
+
+
+git reset --hard <commit>
+
+git reset HEAD~3
+
+
+撤销 git reset 命令的办法 
+1. git reset 'HEAD@{1}'
+git reflog   可以查看 <commit>
+git reset --hard <commit>
+
+
+
+

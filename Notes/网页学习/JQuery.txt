@@ -1,0 +1,271 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-08-15T15:49:41+08:00
+
+====== JQuery ======
+Created 星期五 15 八月 2014
+
+在codecademy 上 JQuery 部分学习写过的代码
+
+$(document).ready(
+	$("div").fade(1000) ;
+	$("#no").hide() ;
+);
+
+$(document).ready(
+	$("div").fadeTo("fast", 1) ;
+	$("div").mouseenter( function(){
+		$("div").hide() ;
+	}) ;
+) ;
+
+$(document).ready( function(){
+    $('div').mouseenter( function() {
+        $('div').fadeTo('fast' , 1.0 ) ;
+    }) ;
+    $('div').mouseleave( function(){
+        $('div').fadeTo('fast' , 0.5 ) ;
+    }) ;
+}) ;
+
+
+
+$(document).ready(function() {
+   $('div').mouseenter(function() {
+       $(this).animate({
+           height: '+=10px'
+       });
+   });
+   $('div').mouseleave(function() {
+       $(this).animate({
+           height: '-=10px'
+       }); 
+   });
+   $('div').click(function() {
+       $(this).toggle(1000);
+   }); 
+});
+
+//   使用变量  
+$(document).ready(function() {
+    var $target = $('#ol4') ;
+    $target.fadeOut('fast');
+});
+
+  var $div = $('div') ;
+
+
+//  点击按钮，使得一个class的元素消失
+$(document).ready(function() {
+    $('button').click(function() {
+        $('.vanish').fadeOut('slow') ;
+    });
+});
+
+//  点击按钮，使得id是blue的元素消失
+$(document).ready(function() {
+    $('button').click(function() {
+        $('#blue').fadeOut('slow');
+    });
+});
+
+//  compound selector 
+$('.pink, .red').fadeTo('slow', 0 ) ;
+
+
+$(document).ready(function() {
+    $('div').click(function() {
+        $(this).fadeOut('slow');
+    });
+});
+
+$(document).ready( function() {
+    $('.pull-me').click( function(){
+        $('.panel').slideToggle('slow') ;
+    } ) ;
+} )
+
+
+$(document).ready( function() {
+$('body').append($('<p>I\'m a paragraph!</p>') ) ;
+} ) 
+append 
+prepend
+appendTo
+prependTo
+
+
+// after , before function ,
+// remove  ,  empty  function 
+$(document).ready( function(){
+    var $p = $('<p>hello</p>') ;
+    $('#one').after($p) ;
+    $d = $('#two') ;
+    $d.after($($p)) ;
+    
+    $p.remove() ;
+})
+
+//  $('selector').addClass('className');
+//  $('selector').removeClass('className');
+$(document).ready( function() {
+    $('#text').addClass('highlighted') ;
+})
+
+//  toggleClass
+//  该方法检查每个元素中指定的类。如果不存在则添加类，如果已设置则删除之。这就是所谓的切换效果。
+$(document).ready( function() {
+    $('#text').toggleClass('highlighted') ;
+})
+
+
+//  $("div").height("100px");
+//  $("div").width("50px");
+//  $("div").css("background-color","#008800");
+$(document).ready( function() {
+    $('div').css('border-radius','10');
+//    $('div').css('height','200px') ;
+    $('div').height('200px') ;
+//    $('div').css('width', '200px') ;
+    $('div').width('200px') ;
+} )
+
+
+//  $('div').html();   change the first one's content
+//  $('input:checkbox:checked').val();    get the value of form
+$(document).ready( function() {
+    $('p').html( 'jQuery magic in action!' ) ;
+})
+
+$(document).on function   'event' , 'class' , function 3 parameter
+$(document).ready( function() {
+    $('#button').click( function(){
+        var toAdd = $('input[name=checkListItem]').val() ;
+        $('.list').append('<div class="item">'+ toAdd + '</div>') ;
+    }) ;
+    $(document).on('click','.item',function(){
+        $(this).remove() ;
+    }) ;
+}) ;
+
+
+// hover  功能类似  mouseenter + mouseleave
+//  hover( function() {}// enter ,  function() {}//leave ) ;
+$(document).ready( function() {
+    $('div').hover( function() {
+        $('div').addClass('red');
+    } ) ;
+    $('div').click( function() {
+        $('div').fadeOut('fast');
+    } ) ;
+})
+
+
+$(document).ready( function() {
+    $('div').dblclick( function() {
+        $(this).fadeOut('fast') ;
+    } ) ;
+} )
+
+$(document).ready(function(){
+
+  $('div').hover(
+    function(){
+        $(this).addClass('active') ;
+    },
+    function(){
+        $(this).removeClass('active') ;
+    }
+  );
+
+});
+
+$(document).ready( function(){
+    $input = $('input') ;
+    $input.focus( function(){
+        $(this).css('outline-color','#00FF00') ;
+    }) ;
+} )
+
+// animate 
+//  animate() 方法执行 CSS 属性集的自定义动画。
+//  注释：使用 "+=" 或 "-=" 来创建相对动画（relative animations）。
+$(document).ready( function() {
+    $(document).keydown( function() {
+        $('div').animate( {left:'+=10px'} , 500 ) ;
+    } ) ;  
+})
+
+
+
+$(document).ready(function() {
+    $(document).keydown(function(key) {
+        switch(parseInt(key.which,10)) {
+			// Left arrow key pressed
+			case 37:
+				$('img').animate({left: "-=10px"}, 'fast');
+				break;
+			// Up Arrow Pressed
+			case 38:
+				// Put our code here
+				$('img').animate({top:"-=10px"},'fast') ;
+				break;
+			// Right Arrow Pressed
+			case 39:
+				// Put our code here
+				$('img').animate({right:"-=10px"},'fast') ;
+				break;
+			// Down Array Pressed
+			case 40:
+				// Put our code here
+				$('img').animate({bottom:'+=10px'},'fast') ;
+				break;
+		}
+	});
+});
+
+
+
+// what is effect()  ???
+$(document).ready( function(){
+    $( 'div' ).click( function(){
+        $(this).effect( 'explode' ) ;
+    })
+} )
+
+$(document).ready( function(){
+    $( 'div' ).click( function(){
+        $(this).effect( 'bounce' , {times:3} , 500 ) ;
+    })
+} )
+
+$(document).ready( function(){
+    $( 'div' ).click( function(){
+        $(this).effect( 'slide'  ) ;
+    })
+} )
+
+$(document).ready(function() {
+    $("#menu").accordion({collapsible: true, active: false});
+});
+
+$(document).ready( function() {
+    $('#car').draggable() ;
+})
+
+$(document).ready( function() {
+    $('#car').resizable() ;
+})
+
+$(document).ready( function() {
+    $('ol').selectable() ;
+})
+
+$(document).ready( function() {
+    $('ol').sortable() ;
+})
+
+
+###############
+
+

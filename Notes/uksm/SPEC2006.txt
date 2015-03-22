@@ -1,0 +1,65 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-06-12T01:07:10+08:00
+
+====== SPEC2006 ======
+Created Thursday 12 June 2014
+
+
+/bin/runspec 　对后两行是多出来的
+
+现在发现的错误是在　fs  和　stat 这两个部分，我觉得可能是在移动硬盘里面安装的问题，这个里面的文件系统不正常
+
+果然是由于我用的是U盘挂在，刚刚使用
+
+
+
+
+
+
+
+
+
+3.1 先运行shrc来准备测试环境的准备，然后执行runspec命令来实际开始基准测试。
+
+3.2 runsepc命令语法为：runspec [options] [list of benchmarks to run]
+
+3.3 如果生成有效的报告，则需要跑int, fp, 或者 all（就包括int、fp）；否则，你也可以随意选择一个自己想跑的benchmark。
+
+3.4 –tune参数中base和peak的区别在于：base是简单的标准的配置（一般跑个base就可以衡量性能了），peak是可以提供更多个性化的配置编译选项。 默认值就是”–tune base”. （–tune 也简写为 -T，如”-T base”、 –tune all （包括base和peak））。
+The base metrics (e.g. SPECint_base2006) are required for all reported results and have stricter guidelines for compilation. For example, the same flags must be used in the same order for all benchmarks of a given language. This is the point closer to those who might prefer a relatively simple build process.
+The peak metrics (e.g. SPECint2006) are optional and have less strict requirements. For example, different compiler options may be used on each benchmark, and feedback-directed optimization is allowed. This point is closer to those who may be willing to invest more time and effort in development of build procedures.
+
+3.5 配置文件中（文件名中），rate和speed的区别：rate是系统的能达到的总体能力的衡量；speed是系统完成一个任务的速度的衡量。我一般选择rate来看看一段时间内，系统到底能处理多少任务。默认值就是使用rate这种度量方式。
+There are several different ways to measure computer performance. One way is to measure how fast the computer completes a single task; this is a speed measure. Another way is to measure how many tasks a computer can accomplish in a certain amount of time; this is called a throughput, capacity or rate measure.
+
+3.6 action参数是定义做什么测试动作，一般完整的是“–action=validate”，当然你也可以只做编译build、运行run、搭建环境setup等这样的步骤。
+
+3.7 选择copy数量，一般来说copy数量等于CPU核的个数，参数为“-C num”（或–copies num）。注意：如果选择speed度量方式，其copy就是1，是不可以更改的。 其实“-r 4”就等于”–rate –copies 4″.
+
+3.8 “-c file”等于”–config file”，用于指定本次运行的配置文件。
+
+3.9 “-o formate”等于“–output_format format”，指定生成输出报告、文件的格式。
+
+3.10 我常选择的配置文件如下：
+Linux: Example-linux64-amd64-gcc43.cfg
+Windows: cpu2006.1.1.ic12.winx64.sse42.rate.cfg
+an example command line: bin/runspec –action=validate -o all -r 4 -c Example-linux64-amd64-gcc43.cfg all
+
+其实，SPECCPU提供了很详细的参考文档，如下：
+常见问题的解答：www.spec.org/cpu2006/Docs/readme1st.html
+runspec命令参数：http://www.spec.org/cpu2006/Docs/runspec.html
+
+
+
+
+需要修改ww权限   [[./result]]  ,/
+
+
+[[./bin/runspec]] -c jxcbase all
+ 
+如果要用 fp 的话还需要fortran编译器
+sudo apt-get install gfortran
+
+
+

@@ -1,0 +1,17 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-07-11T21:08:09+08:00
+
+====== Dierence engine:  harnessing memory redundancy ======
+Created 星期五 11 七月 2014
+
+
+Pbulished in: 
+Magazine
+Communications of the ACM CACM Homepage archive
+Volume 53 Issue 10, October 2010 
+Pages 85-93
+
+
+
+

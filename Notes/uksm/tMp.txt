@@ -1,0 +1,41 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-03-16T11:06:06+08:00
+
+====== tMp ======
+Created Sunday 16 March 2014
+
+schedule_timeout
+schedule_timeout_interruptible
+schedule_timeout_killable
+schedule_uninterruptible
+schedule
+schedule_preempt_disabled
+
+
+
+add_waitqueue
+wake_up
+
+
+唤醒操作通过函数wake_up进行，它会唤醒指定的等待队列上的所有进程。它调用函数try_to_wake_up，该函数负责将进程设置为TASK_RUNNING状态，调用activate_task将此进程放入可执行队列，如果被唤醒的进程优先级比当前正在运行的进程的优先级高，还有设置need_resched标志。通常哪段代码促使等待条件达成，它就负责随后调用wake_up()函数。 
+
+
+waitqueue_active(   )
+wake_up(   )
+
+
+
+观察   kswapd  的 实现中，   __add_wait_queue( q , wait ) 是在函数  prepare_to_wait  中调用的
+
+使用了  finish_wait()   删除等待队列中的自己
+
+
+ 错误     
+INIT:  cannot execute "/bsin/getty"
+
+
+
+
+
+

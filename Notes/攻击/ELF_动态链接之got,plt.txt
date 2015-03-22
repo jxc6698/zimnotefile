@@ -1,0 +1,36 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-06-07T15:36:29+08:00
+
+====== ELF 动态链接之got,plt ======
+Created Saturday 07 June 2014
+
+got  :  global offset Tabel
+plt   :  procedure linkage Table
+
+ 一开始函数跳转到段   .plt 中
+每一项占用  16 个字节
+
+gof  内每一项占用 8 字节，　第二项，共享库链表的地址　　第三项　是函数地址
+
+可以看到对GOT表项修改的代码位于  [[/lib64/ld-linux-x86-64.so.2 中]]
+也就是说  用于查找动态库中的函数地址的函数是在链接解释器当中的，不过这样也有道理，因为共享库链表（在加载共享库时）是由链接解释器来构造的，所以搜寻这个链表的函数也理应由它来实现
+
+
+如果直接在编译好了的　ELF 文件中修改对应的 GOT 表项的话，直接运行会出现seqmentfault ，　但是如果使用gdb运行就没有问题，所以我下面需要搜索一下　有什么保护  GOT表项不被修改的机制，和保护PLT 表的机制
+
+
+
+
+
+在地心拦截
+
+
+
+
+
+
+
+
+
+

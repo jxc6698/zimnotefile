@@ -1,0 +1,32 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2013-10-29T21:10:44+08:00
+
+====== up procedure ======
+Created Tuesday 29 October 2013
+
+frontswap  通用接口
+
+frontswap_store
+frontswap_load
+frontswap_invalidate_page
+frontswap_invalidate_area
+frontswap_init
+
+
+从 shmem_writepage     到     swap_writepage 的逻辑
+
+
+这里获取了 一次 inode ，难道这里只能被文件系统引用吗
+
+swap_readpage
+
+mm/swapfile.c, line 1533      try_to_unuse
+mm/shmem.c, line 870      
+mm/swap_state.c, line 29      struct address_space_operations swap_aops 
+mm/page_io.c, line 232
+include/linux/swap.h:
+line 373
+line 500
+
+

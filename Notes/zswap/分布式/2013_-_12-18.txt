@@ -1,0 +1,29 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2013-12-18T10:22:08+08:00
+
+====== 2013 - 12-18 ======
+Created Wednesday 18 December 2013
+
+
+
+
+
+
+IC1 :  all loyal licutcnants obey the same order
+IC2 :  if the commanding general is loyal, then every loyal licutcnants obdy the order he sends
+
+
+交互一致性
+k=2 r=3 n-1=4
+
+n=3k+1 , r = k+1
+
+
+
+Signed Message
+
+
+
+
+

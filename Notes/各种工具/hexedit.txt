@@ -1,0 +1,36 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-06-07T00:35:50+08:00
+
+====== hexedit ======
+Created Saturday 07 June 2014
+
+hexdump 可以查看　16进制的文件
+bless 一个编辑器
+vim + xxd 挺好的
+
+
+
+直接输入就是替换
+不知道怎么插入（就是insert模式）和删除。。。。
+
+   F2:     save
+       F3:     load file
+       F1:     help
+       Ctrl-L: redraw
+       Ctrl-Z: suspend
+       Ctrl-X: save and exit
+       Ctrl-C: exit without saving
+
+
+       Tab:    toggle hex/ascii
+       Return: go to
+       Backspace: undo previous character
+       Ctrl-U: undo all
+       Ctrl-S: search forward
+       Ctrl-R: search backward
+
+
+
+
+

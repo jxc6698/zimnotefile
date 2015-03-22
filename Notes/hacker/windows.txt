@@ -1,0 +1,64 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-07-03T12:59:00+08:00
+
+====== windows ======
+Created 星期四 03 七月 2014
+
+
+windows sidebar gadgets help make you cooler   
+
+----------
+
+据说有一种方法可以删除病毒
+cmd ， 切换到对应磁盘目录下面去，输入
+attrib -s -h *.* [[/s]] /d
+执行以后可以在目录下面看到 autoxxx.inf  xxxxx.exe，删掉它们，OK
+
+---------
+cmd :
+
+off
+color a 
+tree
+cls
+title hack1 
+start
+
+shutdown -i 
+http://whatismyip.com
+
+netstat 
+查看 对方的ip
+
+ipconfig [[/hackermode]]
+
+
+obtain   admin 
+enter launch startup repair ( recommended ) 
+
+c://windows/system32/
+copy   cmd   to  cmd_copy
+backup setthc
+rename cmd_copy  to  setthc  
+
+explorer.exe
+
+
+net user adminstrator *
+net user adminstrator [[/active:yes]]
+net localgroup users 
+net localgroup administrator "lze" [[/add]]
+net localgroup administrator "lze" [[/delete]]
+
+
+
+net user
+nst user help assistant
+
+
+
+
+
+
+

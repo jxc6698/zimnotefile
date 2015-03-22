@@ -1,0 +1,28 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-08-21T14:43:01+08:00
+
+====== 命令行登录wufi ======
+Created 星期四 21 八月 2014
+
+使用命令生成需要的配置文件
+# wpa_passphrase ESSID PWD > xxx.conf
+ 
+然后将生成的xxx.conf放到一个确定的目录下，我的放到了~/netconf下面。
+然后运行：
+ 
+# sudo wpa_supplicant -B -i wlan0 -Dwext -c ~/netconf/lncmcc.conf
+# iwconfig wlan0
+ 
+检查已经连接上路由  www.2cto.com  
+ 
+然后就是自动获取ip了。
+ 
+# dhclient wlan0
+ 
+完了可以ping下baidu.com
+ 
+# ping www.baidu.com
+
+
+摘自  http://www.2cto.com/os/201210/160117.html

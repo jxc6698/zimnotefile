@@ -1,0 +1,49 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-07-07T21:06:02+08:00
+
+====== startup ======
+Created 星期一 07 七月 2014
+
+系统启动部分
+
+鉴于我需要在系统启动时去关闭蓝牙和键盘背光灯，需要搞明白系统启动的过程，才能保证对相关配置文件的输入是有效的
+
+POST 自检
+
+BIOS 
+
+启动 [[GRUB?LILO]]
+
+	挂载 ：将initrd中的/proc, /sys  /dev 挂载到当前的主分区中的相应目录  
+	创建目录：/dev/mapper  
+	通过mknod完成block or character special files的创建  
+	相关模块的挂载  
+	创建root设备  
+	挂载 /sysroot  
+	最后完成根切换 
+
+加载内核
+	
+	读入 [[/etc/fstab]]
+	
+执行 init 进程
+	
+	运行 [[/etc/init/rc-sysinit.conf]]   ，其他发行版是 [[/etc/inittab]]
+	
+	启动内核模块   [[/etc/modules.conf]]   或  /etc/modules.d
+
+	执行  [[/etc/rc0.d]]  到 [[/etc/rc6.d]] 中的脚本
+	
+	/etc/rc.d/rc.local
+
+	执行  [[/bin/login]] 程序
+
+
+
+
+
+init执行完毕以后会启动系统内的/etc/inittab文件，来完成系统系统的初始化工作。
+
+
+

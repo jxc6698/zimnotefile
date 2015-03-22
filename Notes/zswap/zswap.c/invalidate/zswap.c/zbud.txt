@@ -1,0 +1,29 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2013-10-29T17:32:44+08:00
+
+====== zbud ======
+Created Tuesday 29 October 2013
+
+zbud
+
+
+zbud_ops
+
+
+调用 zbud 的接口 
+
+zbud_create_pool(       )
+
+zbud_destroy_pool(       )
+
+zbud_alloc(          )
+
+zbud_free(           )
+
+zbud_reclaim_page(      )
+
+zbud_map(  )
+
+zbud_get_pool_size(    )
+

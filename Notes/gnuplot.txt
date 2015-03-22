@@ -1,0 +1,93 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-05-30T23:16:56+08:00
+
+====== gnuplot ======
+Created Friday 30 May 2014
+
+1　红色
+2　绿色
+3	蓝色
+
+
+plot [-pi : pi]  sin(x) , cos(x) with points pointtype 2
+
+plot sin(x) ,  '1.dat'    //  1.dat   中每一行为一个点
+
+set title "My first graph哈哈"
+set xrange [-pi:pi]　　# we want only one cycle
+set xtics ('0' 0, '90' pi/2, '-90' -pi/2, '45' pi/4,'-45' -pi/4,'135' 3*pi/4,'-135' -3*pi/4)
+set grid
+set xlabel 'Angle, in degrees'
+set ylabel 'sin(angle)'
+plot sin(x) 
+
+
+plot sin(x) with linespoints pointtype 5, cos(x) w boxes lt 4
+//  w 代表 with  lt  linespoints
+
+set key top left
+set key box
+plot [-pi:pi] sin(x) title 'sinusoid' with linespoints pointtype 5, cos(x) t 'cosine' w boxes lt 4
+
+
+
+//  多个图
+set xrange [-pi:pi]
+# gnuplot recommends setting the size and origin before going to multiplot mode
+# This sets up bounding boxes and may be required on some terminals
+set size 1,1
+set origin 0,0
+
+# Done interactively, this takes gnuplot into multiplot mode
+set multiplot
+
+# plot the first graph so that it takes a quarter of the screen
+set size 0.5,0.5
+set origin 0,0.5
+plot sin(x)
+
+# plot the second graph so that it takes a quarter of the screen
+set size 0.5,0.5
+set origin 0,0
+plot 1/sin(x)
+
+# plot the third graph so that it takes a quarter of the screen
+set size 0.5,0.5
+set origin 0.5,0.5
+plot cos(x)
+
+# plot the fourth graph so that it takes a quarter of the screen
+set size 0.5,0.5
+set origin 0.5,0
+plot 1/cos(x)
+
+# On some terminals, nothing gets plotted until this command is issued
+unset multiplot
+# remove all customization
+reset
+
+
+
+设置大小
+gnuplot>set size 0.5,0.5 %长宽均为默认宽度的一半，建议用这个取值，尤其是画成ps或eps图形的时候
+gnuplot>set origin 0.0,0.5   %设定图的最左下角的那一点在图形面板中的位置。这里图将出现在左上角。
+
+
+
+
+
+
+
+
+
+plot  'cpudata1' u 1 w linespoints lt 1 , 'cpudata' u 1 w lp lt 2
+
+
+
+
+
+
+
+
+

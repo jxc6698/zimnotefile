@@ -1,0 +1,974 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-08-31T09:37:18+08:00
+
+====== Make a interactive website ======
+Created 星期日 31 八月 2014
+
+这个是Codecademy的 Make a interactive website 课程的代码记录
+
+
+#################  the first part starts ####
+
+app.js 
+
+var main = function() {
+    $('.icon-menu').click( function() {
+        $('.menu').animate( {left: '0px'} , 200 ) ;
+        $('body').animate({ left: '285px'} , 200 )
+    } ) ;
+  ;
+    $('.icon-close').click( function() {
+        $('.menu').animate( {left: '-285px'},200 ) ;
+        $('body').animate({ left: '0px'} , 200 )
+    } )
+} ;
+
+$(document).ready( main ) ; 
+
+
+index.html
+
+<html>
+  <head>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400;300' rel='stylesheet' type='text/css'>
+    <link href='style.css' rel='stylesheet'>
+
+    
+  </head>
+  <body>
+
+    <div class="menu">
+      
+      <!-- Menu icon -->
+      <div class="icon-close">
+        <img src="http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/uber/close.png">
+      </div>
+
+      <!-- Menu -->
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Help</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+
+    <!-- Main body -->
+    <div class="jumbotron">
+
+      <div class="icon-menu">
+        <i class="fa fa-bars"></i>
+        Menu
+      </div>
+    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
+
+
+style.css
+
+/* Initial body */
+body {
+  left: 0;
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Initial menu */
+.menu {
+  background: #202024 url('http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/uber/black-thread.png') repeat left top;
+  left: -285px;  /* start off behind the scenes */
+  height: 100%;
+  position: fixed;
+  width: 285px;
+}
+
+/* Basic styling */
+
+.jumbotron {
+  background-image: url('http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/uber/bg.png'); 
+  height: 100%;
+  -webkit-background-size: cover;
+     -moz-background-size: cover;
+       -o-background-size: cover;
+          background-size: cover;
+}
+
+.menu ul {
+  border-top: 1px solid #636366;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu li {
+  border-bottom: 1px solid #636366;
+  font-family: 'Open Sans', sans-serif;
+  line-height: 45px;
+  padding-bottom: 3px;
+  padding-left: 20px;
+  padding-top: 3px;
+}
+
+.menu a {
+  color: #fff;
+  font-size: 15px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.icon-close {
+  cursor: pointer;
+  padding-left: 10px;
+  padding-top: 10px;
+}
+
+.icon-menu {
+  color: #fff;
+  cursor: pointer;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  padding-bottom: 25px;
+  padding-left: 25px;
+  padding-top: 25px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.icon-menu i {
+  margin-right: 5px;
+}
+
+
+#################    the first part ends ####
+
+
+#################     the second part starts ##
+
+percentage( 23 , 30 ) ;
+
+var main = function() {
+  $(".btn").click(function() {
+		$(this).toggleClass( "btn-like" ) ;
+
+  });
+};
+
+$(document).ready(main);
+
+
+
+
+#################   the second part ends ###
+
+
+
+#################   the third part starts ####
+
+
+主要是关于js 和 jquery 来进行管理鼠标点击，键盘按键事件的处理
+
+
+index.html
+
+<!doctype html>
+<html>
+  <head>
+    <link href="http://s3.amazonaws.com/codecademy-content/courses/ltp2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="articles container">
+      
+      <div class="article current">
+        <div class="item row">
+          <div class="col-xs-3">
+            <p class="source">FLIGHT</p>
+          </div>
+          <div class="col-xs-6">
+            <p class="title">Embraer adds third Legacy 500 prototype to flight test campaign</p>
+          </div>
+          <div class="col-xs-3">
+            <p class="pubdate">Mar 23</p>
+          </div>
+        </div>
+        <div class="description row">
+          <div class="col-xs-3">&nbsp;</div>
+          <div class="col-xs-6">
+            <h1>Embraer adds third Legacy 500 prototype to flight test campaign</h1>
+            <p>The third Legacy 500 has joined Embraer's flight test programme aimed at delivering the midsize business jet in 2014. The airtcraft, serial number 003...</p>
+          </div>
+          <div class="col-xs-3">&nbsp;</div>
+        </div>
+      </div>
+
+      <div class="article">
+        <div class="item row">
+          <div class="col-xs-3">
+            <p class="source">AW Commercial Aviation</p>
+          </div>
+          <div class="col-xs-6">
+            <p class="title">CSeries Supplier Scramble</p>
+          </div>
+          <div class="col-xs-3">
+            <p class="pubdate">Mar 22</p>
+          </div>
+        </div>
+        <div class="description row">
+          <div class="col-xs-3">&nbsp;</div>
+          <div class="col-xs-6">
+            <h1>CSeries Supplier Scramble</h1>
+            <p>Three months before the planned first flight of its CSeries, Bombardier is grappling with supplier issues crucial to meeting its production cost...</p>
+          </div>
+          <div class="col-xs-3">&nbsp;</div>
+        </div>
+      </div>
+
+      <div class="article">
+        <div class="item row">
+          <div class="col-xs-3">
+            <p class="source">AW business aviation</p>
+          </div>
+          <div class="col-xs-6">
+            <p class="title">Flying the Gulfstream G650</p>
+          </div>
+          <div class="col-xs-3">
+            <p class="pubdate">Mar 22</p>
+          </div>
+        </div>
+        <div class="description row">
+          <div class="col-xs-3">&nbsp;</div>
+          <div class="col-xs-6">
+            <h1>Flying the Gulfstream G650</h1>
+            <p>Gulfstream is turning up the heat in the large-cabin business aircraft competition with its new G650 flagship, the largest, fastest, farthest-ranging...</p>
+          </div>
+          <div class="col-xs-3">&nbsp;</div>
+        </div>
+      </div>
+
+      <div class="article">
+        <div class="item row">
+          <div class="col-xs-3">
+            <p class="source">FLIGHT</p>
+          </div>
+          <div class="col-xs-6">
+            <p class="title">New retirements cut RAF VC10 fleet to four</p>
+          </div>
+          <div class="col-xs-3">
+            <p class="pubdate">Mar 22</p>
+          </div>
+        </div>
+        <div class="description row">
+          <div class="col-xs-3">&nbsp;</div>
+          <div class="col-xs-6">
+            <h1>New retirements cut RAF VC10 fleet to four</h1>
+            <p>The UK Royal Air Force has retired another two of its Vickers VC10 tankers, with the pair's departure reducing its inventory of the Rolls-Royce...</p>
+          </div>
+          <div class="col-xs-3">&nbsp;</div>
+        </div>
+      </div>
+
+      <div class="article">
+        <div class="item row">
+          <div class="col-xs-3">
+            <p class="source">FLIGHT</p>
+          </div>
+          <div class="col-xs-6">
+            <p class="title">Virgin can deliver more value for Delta than for SIA: Bastian</p>
+          </div>
+          <div class="col-xs-3">
+            <p class="pubdate">Jul 17</p>
+          </div>
+        </div>
+        <div class="description row">
+          <div class="col-xs-3">&nbsp;</div>
+          <div class="col-xs-6">
+            <h1>Virgin can deliver more value for Delta than for SIA: Bastian</h1>
+            <p>Delta Air Lines president Ed Bastian is confident that the carrier can extract far more value from its shareholding in Virgin Atlantic compared with...</p>
+          </div>
+          <div class="col-xs-3">&nbsp;</div>
+        </div>
+      </div>
+
+      <div class="article">
+        <div class="item row">
+          <div class="col-xs-3">
+            <p class="source">AW Defense</p>
+          </div>
+          <div class="col-xs-6">
+            <p class="title">Freedom Experiences Two More Power Outages</p>
+          </div>
+          <div class="col-xs-3">
+            <p class="pubdate">Mar 22</p>
+          </div>
+        </div>
+        <div class="description row">
+          <div class="col-xs-3">&nbsp;</div>
+          <div class="col-xs-6">
+            <h1>Freedom Experiences Two More Power Outages</h1>
+            <p>The Littoral Combat Ship (LCS-1) USS Freedom’s first overseas deployment to Southeast Asia has been marred by two more power outages...</p>
+          </div>
+          <div class="col-xs-3">&nbsp;</div>
+        </div>
+      </div>
+
+      <div class="article">
+        <div class="item row">
+          <div class="col-xs-3">
+            <p class="source">FLIGHT</p>
+          </div>
+          <div class="col-xs-6">
+            <p class="title">FedEx to acquire up to 30 United 757s</p>
+          </div>
+          <div class="col-xs-3">
+            <p class="pubdate">Mar 22</p>
+          </div>
+        </div>
+        <div class="description row">
+          <div class="col-xs-3">&nbsp;</div>
+          <div class="col-xs-6">
+            <h1>FedEx to acquire up to 30 United 757s</h1>
+            <p>United Airlines is to sell up to 30 Boeing 757s to freight operator FedEx Express, with deliveries of the twinjets set to start this year.</p>
+          </div>
+          <div class="col-xs-3">&nbsp;</div>
+        </div>
+      </div>
+
+    </div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
+
+
+
+style.css
+
+body {
+  background-image: url('http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/reader/bg.png');
+  -webkit-background-size: cover;
+     -moz-background-size: cover;
+       -o-background-size: cover;
+          background-size: cover;
+}
+
+p {
+  margin: 0;
+}
+
+.row {
+  margin: 0;
+}
+
+.articles {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.article {
+  color: #222;
+  background: rgba(255,255,255,.9);
+  border-spacing: 2px;
+  border-color: gray;
+  font-family: arial,sans-serif;
+  border-bottom: 1px #e5e5e5 solid;
+}
+
+.current .item {
+  background: rgba(206,220,206,.9);
+}
+
+.item {
+  cursor: pointer;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  
+}
+
+.item .source {
+  margin-left: 20px;
+}
+
+.item .title {
+  font-weight: bold;
+}
+
+.item .pubdate {
+  margin-right: 20px;
+}
+
+.item .pubdate {
+  text-align: right;  
+}
+
+.description {
+  display: none;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.description h1 {
+  margin-top: 0px;
+  font-size: 23px;
+}
+
+app.js
+
+var main = function(){
+    $('.article').click( function() {
+        $('.article').removeClass('current') ;
+        $('.description').hide() ;
+        $(this).addClass('current');
+        $(this).children('.description').show() ;
+    } )
+    $(document).keypress(function(event){
+        if( event.which === 111) 
+        {
+            $('.current').children('.description').toggle() ;
+        }
+        else if( event.which === 110 ){
+            $currentArticle = $('.current') ;
+            $nextArticle = $currentArticle.next() ;
+            $currentArticle.removeClass('current') ;
+            $nextArticle.addClass('current') ;
+        }
+    }) ;
+} ;
+
+$(document).ready(main) ;
+
+
+
+################## the third part ends  ####
+
+
+################## the fourth part starts ###
+
+$('<p>')   create  new p element and select it
+.appendTo() ;
+.prependTo() ;
+
+.hide() hides the selected HTML element
+.show() displays an element
+.toggle() alternates hiding and showing an element
+.addClass() adds a CSS class to an element
+.removeClass() removes a class from an element
+.toggleClass() alternates adding and removing a class from an element
+
+
+.next() ;
+.prev() ;
+.children() ;
+
+.text() .val()
+.val() 用于 form里面
+
+
+
+
+index.html
+
+<!doctype html>
+<html>
+  <head>
+    <link href="http://s3.amazonaws.com/codecademy-content/courses/ltp2/css/bootstrap.min.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <link href="style.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+      <form>
+        <div class="form-group">
+          <textarea class="form-control status-box" rows="2" placeholder="What's on your mind?"></textarea>
+        </div>
+      </form>
+      <div class="button-group pull-right">
+        <p class="counter">140</p>
+        <a href="#" class="btn btn-primary">Post</a>
+      </div>
+    
+      <ul class="posts">
+      </ul>
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="app.js"></script>
+    
+  </body>
+</html>
+
+app.js
+
+var main = function() {
+    $('.btn').click(function() {
+        var post = $('.status-box').val() ;
+        $('<li>').text(post).prependTo('.posts') ;
+        $('.status-box').val('') ;
+        $('.counter').text(140) ;
+        $('.btn').addClass('disabled') ;
+    }) ;
+    $('.status-box').keyup( function(){
+        var postLength = $(this).val().length ;  
+        charactersLeft = 140 - postLength ;
+        $('.counter').text(charactersLeft) ;
+        if( charactersLeft <= 0 )
+        {
+            $('.btn').addClass('disabled');
+        }
+        else if( charactersLeft === 140 )
+        {
+            $('.btn').addClass('disabled') ;
+        }
+        else
+        {
+            $('.btn').removeClass('disabled') ;
+        }
+    } ) ;
+    
+    $('.btn').addClass('disabled') ;
+} ;
+
+$(document).ready( main ) ;
+
+
+style.css
+
+html,
+body {
+  font-family: 'Roboto', sans-serif;
+  color: #404040;
+  background-color: #eee;
+}
+
+.container {
+  width: 520px;
+  margin-top: 20px;
+}
+
+.button-group {
+  margin-bottom: 20px;
+}
+
+.counter {
+  display: inline;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-right: 10px;
+}
+
+.posts {
+  clear: both;
+  list-style: none;
+  padding-left: 0;
+  width: 100%;
+}
+
+.posts li {
+  background-color: #fff;
+  border: 1px solid #d8d8d8;
+  padding-top: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  word-wrap: break-word;
+  min-height: 42px;
+}
+
+
+
+################## the fourth part ends  ###
+
+
+##################  the fifth part starts ####
+
+.slideDown( 1000 ) ;
+.slideUp( 1000 ) ;
+.fadeIn( 1000 ) ;
+.fadeOut( 1000 ) ;
+
+.animate( {  : "1000px" }  , 1000 ) ;
+
+ <li class="dot">&bull;</li>   &bull; 代表什么
+
+
+app.js
+
+var main = function() {
+    $('.dropdown-toggle').click( function() {
+        $(".dropdown-menu").toggle() ;
+    }) ;
+    $('.arrow-next').click( function() {
+        var currentSlide = $('.active-slide');
+        var nextSlide = currentSlide.next();
+        currentDot = $('.active-dot') ;
+        nextDot = currentDot.next() ;
+        currentDot.removeClass('active-dot');
+        if( nextSlide.length === 0 )
+        {
+            nextSlide = $('.slide').first() ;
+            nextDot = $('.dot').first() ;
+        }
+        nextDot.addClass('active-dot') ;
+        
+        currentSlide.fadeOut(600).removeClass("active-slide") ;
+        nextSlide.fadeIn( 600 ).addClass( "active-slide") ;
+      
+    }) ;
+    $('.arrow-prev').click( function() {
+        var currentSlide =$('.active-slide') ;
+        var prevSlide = currentSlide.prev() ;
+        currentDot = $('.active-dot') ;
+        prevDot = currentDot.prev() ;
+        if( prevSlide.length == 0)
+        {
+            prevSlide = $('.slide').last() ;
+            prevDot = $('.dot').last() ;
+        }
+        currentSlide.fadeOut( 600 ).removeClass('active-slide') ;
+        prevSlide.fadeIn(600).addClass( 'active-slide') ;
+        currentDot.removeClass('active-dot') ;
+        prevDot.addClass('active-dot') ;
+    }) ;
+    
+} ;
+
+$(document).ready(main) ;
+
+
+index.html
+
+<!doctype html>
+<html>
+  <head>
+    <link href='http://fonts.googleapis.com/css?family=Oswald:400,300' rel='stylesheet'>
+    <link href="http://s3.amazonaws.com/codecademy-content/courses/ltp2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="header">
+      <div class="container">
+        <a href="#" class="logo-icon">
+          <img src="http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/flipboard/logo.png">
+        </a>
+
+        <ul class="menu">
+          <li><a href="#">Get the App</a></li>
+          <li><a href="#">Tutorials</a></li>
+          <li><a href="#">Magazines</a></li>
+          <li><a href="#">Web Tools</a></li>
+          <li><a href="#">Support</a></li>
+          <li><a href="#">Careers</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle">More <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Community</a></li>
+              <li><a href="#">Our Blog</a></li>
+              <li><a href="#">Maps Blog</a></li>
+              <li><a href="#">Eng Blog</a></li>
+              <li><a href="#">Advertisers</a></li>
+              <li><a href="#">Publishers</a></li>
+              <li><a href="#">About Us</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="slider">
+
+      <div class="slide active-slide">
+        <div class="container">
+          <div class="row">
+            <div class="slide-copy col-xs-5">
+              <h1>Flipboard Is Your Personal Magazine</h1>
+              <p>It's a single place to discover, collect and share the news you care about.  Add your favorite social networks, publications and blogs to stay connected to the topics and people closest to you.</p>
+              
+              <ul class="get-app">
+                <li><a href="#"><img src="http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/flipboard/ios.png"></a></li>
+                <li><a href="#"><img src="http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/flipboard/android.png"></a></li>
+                <li><a href="#"><img src="http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/flipboard/windows.png"></a></li>
+                <li><a href="#"><img src="http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/flipboard/blackberry.png"></a></li>
+              </ul>
+            </div>
+            <div class="slide-img col-xs-7">
+              <img src="http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/flipboard/home.png" width="540px">
+            </div>
+          </div>
+        </div>      
+      </div>
+
+      <div class="slide slide-feature">
+        <div class="container">
+          <div class="row">
+            <div class="col-xs-12">
+              <a href="#"><img src="http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/flipboard/cnn.png"></a>
+              <a href="#">Read Now</a>
+            </div>
+            
+          </div>
+        </div>      
+      </div> 
+
+      <div class="slide">
+        <div class="container">
+          <div class="row">
+            <div class="slide-copy col-xs-5">
+              <h1>Enjoy Flipboard Magazines</h1>
+              <h2>on the Web</h2>
+              <p>Millions of people use Flipboard to read and collect the news they care about, curating their favorite stories into their own magazines on any topic imaginable. Now magazines created by our readers, from Dali to End Trafficking, can be shared and enjoyed on the Web by anyone, anywhere.</p>
+              
+            </div>
+            <div class="slide-img col-xs-7">
+              <img src="http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/flipboard/magazines.png">
+            </div>
+          </div>
+        </div>      
+      </div> 
+
+
+      <div class="slide">
+        <div class="container">
+          <div class="row">
+            <div class="slide-copy col-xs-5">
+              <h1>Badges & Widgets</h1>
+              <p>Millions of people use Flipboard to read and collect the news they care about, curating their favorite stories into their own magazines. Now you can promote the ones you create or think are awesome.</p>
+              
+              <ul class="get-app">
+                <li><a href="#"><img src="http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/flipboard/ios.png"></a></li>
+                <li><a href="#"><img src="http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/flipboard/android.png"></a></li>
+                <li><a href="#"><img src="http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/flipboard/windows.png"></a></li>
+                <li><a href="#"><img src="http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/flipboard/blackberry.png"></a></li>
+              </ul>
+            </div>
+            <div class="slide-img col-xs-7">
+              <img src="http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/flipboard/bw.png" width="540px">
+            </div>
+          </div>
+        </div>      
+      </div> 
+
+    </div>
+
+    <div class="slider-nav">
+      <a href="#" class="arrow-prev"><img src="http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/flipboard/arrow-prev.png"></a>
+      <ul class="slider-dots">
+        <li class="dot active-dot">&bull;</li>
+        <li class="dot">&bull;</li>
+        <li class="dot">&bull;</li>
+        <li class="dot">&bull;</li>
+      </ul>
+      <a href="#" class="arrow-next"><img src="http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/flipboard/arrow-next.png"></a>
+    </div> 
+    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
+
+style.css
+
+/* General */
+
+.container {
+  width: 960px;
+}
+
+
+/* Header */
+
+.header {
+  background-color: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid #ddd;
+  
+  font-family: 'Oswald', sans-serif;
+  font-weight: 300;
+  
+  font-size: 17px;
+  padding: 15px;
+}
+
+
+/* Menu */ 
+
+.header .menu {
+  float: right;
+  list-style: none;
+  margin-top: 5px;
+}
+
+.menu > li {
+  display: inline;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.menu a {
+  color: #898989;
+}
+
+/* Dropdown */
+
+.dropdown-menu {
+  font-size: 16px;
+  margin-top: 5px;
+  min-width: 105px;
+}
+
+.dropdown-menu li a {
+  color: #898989;
+  padding: 6px 20px;
+  font-weight: 300;
+}
+
+
+/* Carousel */
+
+.slider {
+  position: relative;
+  width: 100%;
+  height: 470px;
+  border-bottom: 1px solid #ddd;
+}
+
+.slide {
+  background: transparent url('http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/flipboard/feature-gradient-transparent.png') center center no-repeat;
+  background-size: cover;
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.active-slide {
+    display: block;
+}
+
+.slide-copy h1 {
+  color: #363636;  
+  
+  font-family: 'Oswald', sans-serif;
+  font-weight: 400;
+  
+  font-size: 40px;
+  margin-top: 105px;
+  margin-bottom: 0px;
+}
+
+.slide-copy h2 {
+  color: #b7b7b7;
+  
+  font-family: 'Oswald', sans-serif;
+  font-weight: 400;
+  
+  font-size: 40px;
+  margin: 5px;
+}
+
+.slide-copy p {
+  color: #959595;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.15em;
+  line-height: 1.75em;
+  margin-bottom: 15px;
+  margin-top: 16px;
+}
+
+.slide-img {
+  text-align: right;
+}
+
+/* Slide feature */
+
+.slide-feature {
+  text-align: center;
+  background-image: url('http://s3.amazonaws.com/codecademy-content/courses/ltp2/img/flipboard/ac.png');
+  height: 470px;
+}
+
+.slide-feature img {
+  margin-top: 112px;
+  margin-bottom: 28px;
+}
+
+.slide-feature a {
+  display: block;
+  color: #6fc5e0;
+  
+  font-family: "HelveticaNeueMdCn", Helvetica, sans-serif;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 400;
+  
+  font-size: 20px;
+}
+
+.slider-nav {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.arrow-prev {
+  margin-right: 45px;
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 9px;
+}
+
+.arrow-next {
+  margin-left: 45px;
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 9px;
+}
+
+.slider-dots {
+  list-style: none;
+  display: inline-block;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+.slider-dots li {
+  color: #bbbcbc;
+  display: inline;
+  font-size: 30px;
+  margin-right: 5px;
+}
+
+.slider-dots li.active-dot {
+  color: #363636;
+}
+
+/* App links */
+
+.get-app {
+  list-style: none;
+  padding-bottom: 9px;
+  padding-left: 0px;
+  padding-top: 9px;
+}
+
+.get-app li {
+  float: left;
+  margin-bottom: 5px;
+  margin-right: 5px;
+}
+
+.get-app img {
+  height: 40px;
+}
+
+
+
+
+################## the fifth part starts ####
+
+
+

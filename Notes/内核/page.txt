@@ -1,0 +1,81 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-09-09T21:26:29+08:00
+
+====== page ======
+Created 星期二 09 九月 2014
+
+page里面有个反向映射
+主要是函数 
+rmap_walk_anon
+rmap_walk_ksm
+rmap_walk_file
+都在 mm/rmap.c 中
+
+其中有个函数 __anon_vma_interval_tree_iter_first
+是使用一个宏定义生成的，这个函数定义在了是 在 mm/interval_tree.c:72
+
+在里面涉及到了红黑树，还有一组红黑树相关的函数宏，RB_DECLARE_CALLBACKS
+
+
+rmap
+ try_to_unmap(),
+try_to_munlock(), page_referenced(), page_mkclean() and
+remove_migration_ptes()
+
+在follow_page( vma , addr , flags ) ;
+flags 中如果由 FOLL_GET 的华，那么这个page在返回前，会被get_page() 的
+
+
+
+page buffer 又是什么 page private
+一般页面有 buffer 就一定有 mapping ， 
+
+-------------------------------------
+有两个函数 page_mapping  page_rmapping  太像了
+page_mapping 获取到  address_spaces 
+page_rmaping  获取到 anon_vma
+
+page->mapping 可能是 address_space 或者是  
+在 shrink_page_list 中，如果申请了 swap entry后，就要重新调用 page_mapping，这样就可以获取到 swapper_spaces 中的 address_space
+
+
+---------------------------------------
+关于各种 set /    函数：
+以下进行列举 所有的位的作用 ： 
+	set_page_private(page,entry.val) ;  // 用于标识页面对应的swap entry 
+	
+	trylock_page( )  //  PG_locked  page->flags
+
+	page_evictable( )  //  evictable 表示   mapping 也不是unevitable   和 !PageMlocked  
+	
+	SetPageSwapCache(page) // 设置页面在 swap 空间中
+
+
+
+
+----------------------------------------------
+page_count
+当可以进行页面交换时，address space 保留一个
+用作文件读写缓存时，buffer head 保留一个
+写入页面时，爷表保留一个
+用作内核缓冲时，slab 保留一个
+
+
+
+_PAGE_PSE
+
+
+
+page fault  的 error code
+bit 0  0  means  no page found, 1 means protection fault
+bit 1  0  means  read, 1 means write
+bit 2  0  means  kernel, 1 means user-mode
+
+
+
+page 的 count 域用于跟踪共享相应页面的进程数目，只要进程释放一个页面或者在它上面执行了 COW,它的count 域 就递减，只有count 域变为 0 时，这个页面才会被释放 。
+
+
+在put_page的时候，如果页面引用计数为0,就是 free_hot_cold_page() 
+

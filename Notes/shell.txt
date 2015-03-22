@@ -1,0 +1,16 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-11-21T17:34:09+08:00
+
+====== shell ======
+Created 星期五 21 十一月 2014
+
+expr 
+
+expr 做乘法 
+expr 1 [[/*]] 2
+
+
+
+
+AllocCsToDsAlias, UINT WINAPI ALLOCCSTODSALLAS(UINT)

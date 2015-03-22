@@ -1,0 +1,13 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-02-28T08:22:19+08:00
+
+====== 2014  第一学期 ======
+Created Friday 28 February 2014
+
+
+
+
+自然语言处理
+
+Open domain Q/A

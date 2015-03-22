@@ -1,0 +1,37 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2013-10-16T20:45:25+08:00
+
+====== page fault ======
+Created Wednesday 16 October 2013
+
+
+在检查玩    fault_in_kernel_space (  address  )
+才会 去检查是否要  开中断   ( why  )    这里应该是检查 内核态的错误 ， 防止出现 死锁 ，但是究竟是怕哪个地方的代码重入  ? 
+
+
+
+handle_pte_fault
+
+
+判断 页表项 
+
+	do_linear_fault
+	 
+	 do_ananymous_page 
+	
+	do_swap_page 
+
+
+
+还有两种  情况  ,  没有理明白
+
+	pte_file( entry )
+		do_nonlinear_fault
+
+	有个 pte_file( entry )
+		do_numa_page
+
+
+vma和vma 之间只要要有1页面的间隔吗
+

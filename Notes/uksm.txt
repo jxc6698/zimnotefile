@@ -1,0 +1,87 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2013-11-15T16:16:25+08:00
+
+====== uksm ======
+Created Friday 15 November 2013
+
+
+几档
+uksmd   运行参数 cpu % 上网站
+
+
+
+
+合并页面的选择 。
+
+
+全局采样一次的时间点（包含页）
+逐页扫描时间点
+
+vma被采样点
+vma被逐页扫描的时间点
+
+
+
+
+时间戳
+vma 时间戳
+
+
+
+
+
+
+有 4 挡 搜索级别
+struct scan_rung uksm_scan_ladder[ SCAN_LADDER_SIZE ]
+
+struct uksm_cpu_present_s 
+	uksm_cpu_preseT[4]
+
+setup_uksm_zero_page
+
+
+
+初始化 
+	uksm_slab_init 
+		rmap_item
+		stable_node
+		node_vma
+		vma_slot
+		tree_noe
+
+
+
+
+
+
+vma_can_enter   uksm.c
+-->
+uksm_flags_can_scan    uksm.c
+
+
+
+
+
+
+struct vm_area_struct         include/linux/mm_types.h
+#ifdef  CONFIG_UKSM
+	struct vma_slot *uksm_vma_slot
+#endif
+
+
+
+vma_fully_scanned(  )      mm/uksm.c    3172
+
+
+
+
+
+
+
+
+
+
+
+
+

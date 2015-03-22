@@ -1,0 +1,9 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-09-20T00:29:49+08:00
+
+====== RCU ======
+Created 星期六 20 九月 2014
+
+
+rcu grace period  还与 rcuos  进程， 可以参照lwn  http://lwn.net/Articles/518953/

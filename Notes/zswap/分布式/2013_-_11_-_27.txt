@@ -1,0 +1,81 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2013-11-27T11:17:22+08:00
+
+====== 2013 - 11 - 27 ======
+Created Wednesday 27 November 2013
+
+
+mutual  exclusion 
+
+
+ME1 : 
+	at most one process may execute in the critical secion at any given point in time ( safety )
+ME2 : 
+	request to enter or exit the critical section will eventually succeed( liveness )
+	--- impossible for one process to enter critical section more than once while other processes are awaiting entry
+ME3 : 
+	if one request to enter the critical section is issued before another request ( as per the -> relation ), then the request will be served in the same order
+
+
+
+线性一致性
+顺序一致性
+因果一致性
+
+
+conherence  单个数据项
+consistence  整个数据集
+
+
+
+
+to  y write y = 2 , read y 
+to  x read x = 0 , write x = 1  
+
+
+FIFO 
+因果一致性
+
+
+
+initilize  write x = 0
+
+p1   
+wirte x=1 , read y
+if y = 0 
+	kill  p2
+	
+initilize  write y = 0 
+
+p2 
+write y=1 , read x
+if x = 0
+	kill  p1
+	
+	
+严格一致性
+线性一致性
+顺序一致性  所有操作排序
+局部一致性   单个数据祥操作
+因果一致性
+PRAM              program  order
+stc   Lc  Sc Coh  CC  PRAM 
+
+
+
+
+ consistency  and MEn
+
+
+
+
+
+
+ 因果序包含两类：  programme order  ， event(message)-driven
+Sc要求满足 programme order
+
+programme order不会被打破
+
+
+

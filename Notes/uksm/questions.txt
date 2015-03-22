@@ -1,0 +1,41 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2013-11-18T15:39:20+08:00
+
+====== questions ======
+Created Monday 18 November 2013
+
+因为uksm工作的速度远大于磁盘I/O，
+但是zswap换页的速度可以与uksm速度一个数量级，而uksm是异步采样扫描的，
+zswap是截获的交换页面的路径，所以如果有大量页面需要交换出去的时候，
+zswap工作的速度大于uksm实际合并的速度。
+ 
+
+
+为什么 会 认为  " uksm 大于磁盘I/O，所以 原来 uksm 与 swap机制没有影响 " ？
+
+
+
+在 rung_add_new_slot 函数中，
+在for循环中 
+每次修改slot->rung的指针都要   BUG_ON(vma_fully_scanned(slot)) ; 是不是为了防止在添加的过程中 这个rung 正在被扫描，这个slot已经被扫描过了，不过这样会出现什么问题吗
+
+
+四
+
+ema   p  5577  不知到这个函数是计算什么的
+
+advance_current_scan     p    4831    不太理解这个函数是干什么的
+
+
+
+五
+
+
+stable and unstalbe  tree   的区别在哪里
+什么一个页面会从stable  被移动 到   unstable tree山？
+是一个页面先插入 unstable 中， 然后如果下次有另一个页面被合并到它里面就移动到 stable tree
+
+
+
+

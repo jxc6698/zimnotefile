@@ -1,0 +1,28 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2013-10-31T16:31:58+08:00
+
+====== read ======
+Created Thursday 31 October 2013
+
+
+
+
+
+swap_readpage
+
+read_swap_cache_async     mm/swap_state.c  :  302
+
+
+
+try_to_unuse(       swapfile.c  : 1125
+swapin_walk_pmd_entry      mm/madvice.c  :  138
+force_shm_swapin_readahead      mm/madvice.c  :  817
+swapin_readahead                    mm/swap_state.c  :   411  // swain in pages in hope we need them soon
+
+
+
+swapin_readahead     // swain in pages in hope we need them soon
+do_swap_page           mm/memory.c    
+shmem_swapin              mm/shmem.c   : 959    911
+

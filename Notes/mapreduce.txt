@@ -1,0 +1,76 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2013-11-21T14:09:05+08:00
+
+====== mapreduce ======
+Created Thursday 21 November 2013
+
+
+
+map 和 reduce 类的都必须是  startic 的，会调用构造函数
+
+
+PPT中扩展的 带词频的倒排索引算法中， 把文档名合并到 key 中，而不是alue 中，  我觉得是为了 在reduce中 方便的进行统一个文档内出现次数统计。      应为这样就可以保证 统一个单词在同一个文档中的统计连续的出现在reduce 中， 从而可以通过改写  setup ， reduce 和 close 函数来实现 带词频的到拍索引算法 
+
+
+
+已经发现这么运行了
+
+haddop jar  xxx.jar  wordcount_test.InvertedIndexer   input output
+
+
+
+2014-4-22
+
+
+
+表名：Shakespeare；列族：word、count
+
+
+Exception in thread "main" java.lang.OutOfMemoryError: unable to create new native thread
+
+
+
+重载 InputFormat   和  Record  
+
+
+
+
+
+PageRank
+如果原始数据集是 、每行包含一个网页名，以及其所包含的所有网页名
+
+mapreduce  1     Phase1:GraphBuilder
+
+map         无
+reduce    URL , < pre_PR ,  link_list >
+
+mapreduce  2     Phase2:PageRankIter
+
+
+map        for each u in link_list  ,  输出  < u , cur_PR / | link_list |   
+reduce   计算所有的和  （  乘以d， 加上  （1-的）/ N ）  URL , < new_PR , link_list
+
+mapreduce  3      Phase3:Rankviewer
+主要是  修改 Partitioner  ， 从而安装 PageRank  的值排序 
+
+
+PR(A) = (1-d) /N+ d (PR(T1)/C(T1) + ... + PR(Tn)/C(Tn))
+这个迭代公式貌似错了，  (1-d)/N后面应该乘以  sum_PR（pageRank值的`总和）
+
+
+好吧，迭代公式倒是是什么我还不清楚。。。。。
+
+下面要解决的问题是如何迭代，现在找到的方法，用外部的循环，通过不断的修改文件来实现迭代（就是后一次的工作会将前一次的输出文件再重新读进来），感觉这样的话效率比较低，还要继续查资料了，不知道有没有使用condition　来判断循环终止的方法。
+
+
+
+
+odps  mapreduce
+
+貌似没有partition
+
+读入的时候可以按照字符串统一读入，但是在写入表的时候，必须根据表项的类型来填写相应的类型
+
+
+

@@ -1,0 +1,54 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-07-25T16:01:14+08:00
+
+====== kswapd ======
+Created 星期五 25 七月 2014
+
+这个函数只会在 init 和 node_hot_add 这两个位置调用
+ kswapd_run  ==>   kthread_run( kswapd , pgdat , "kswapd%d" , nid ) ;
+
+kswapd 在NUMA 有多个，每个node都有一个自己的kswapd
+如kswapd0
+
+kswapd_iniit(void)  == > kswapd_run(nid) ;
+	for_each_node_state(nid, N_MEMORY ) 
+		kswapd_run(n
+
+
+on numa machines, each numa node would have a pg_data_t to describe it's memory layout.
+
+
+pg_data_t 类型 pgdat
+
+
+try_to_freeze() : 返回0 进行thawing tasks ，返回true，那就不进行 balance_pgdat
+
+
+
+跳过 free_pages > high_wmark_pages(zone)
+如果 free_pages <= high_wmark_pages(zone)
+       
+
+populated_zone(zone) 确认zone->present_pages （直译是不是有人口的）
+
+不明白 order 是哪里来的，以及怎么确定的
+不明白  nr_zone   end_zone 的区别， 都是在for循环结束上
+
+zone_reclaimable(zone)  中有参数6
+
+
+__zone_watermark_ok
+
+ALLOC_HIGH    分配是迫切的
+ALLOC_HARDER     更加迫切
+
+
+
+这里在 回收的时候就会使用到 shrink_zone
+
+
+
+判定 该进程是否是kswapd ，有一个函数 current_kswapd() swap.h : 31
+
+

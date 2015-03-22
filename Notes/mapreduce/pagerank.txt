@@ -1,0 +1,14 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-04-28T14:01:27+08:00
+
+====== pagerank ======
+Created Monday 28 April 2014
+
+
+
+摘自wiki     http://en.wikipedia.org/wiki/PageRank 
+
+The difference between them is that the PageRank values in the first formula sum to one, while in the second formula each PageRank is multiplied by N and the sum becomes N. A statement in Page and Brin's paper that "the sum of all PageRanks is one"[4] and claims by other Google employees[20] support the first variant of the formula above.
+
+由此可以看出，之前我没有想错，这几个pagerank的公式的确是对sum 作了假设

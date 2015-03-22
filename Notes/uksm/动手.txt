@@ -1,0 +1,960 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-03-10T16:07:44+08:00
+
+====== 动手 ======
+Created Monday 10 March 2014
+
+--------------------------------------
+
+首先是一些接口问题    我无非就是要在zswap 的调用接口前做文章，在调用zswap存储之前和zswap读取之前添加一下代码，所以要先确定我的代码插入点
+
+frontswap  通用接口
+
+frontswap_store
+frontswap_load
+frontswap_invalidate_page
+frontswap_invalidate_area
+frontswap_init
+
+
+从 shmem_writepage     到     swap_writepage 的逻辑
+
+
+这里获取了 一次 inode ，难道这里只能被文件系统引用吗
+
+swap_readpage
+
+mm/swapfile.c, line 1533      try_to_unuse
+mm/shmem.c, line 870      
+mm/swap_state.c, line 29      struct address_space_operations swap_aops 
+
+
+
+在同步换页有 try_to_free_pages  ，异步换页 有 kswapd
+
+同步的代码总    shrink_caches    ->   shrink_zone
+
+
+shrink_caches
+
+shrink_cache
+shrink_list
+pageout
+swap_page
+refill_inactive_zone
+Shrink Slab
+
+
+就是对于  active list  调用  refill_inactive_zone  ，对于 inactive list 调用 pageout()  
+
+
+
+
+对于 异步 和 同步 换入， 异步 和 同步 和 异步 换出页面。
+
+换入页面  
+	同步
+		do_page_fault 
+	异步
+		read_swap_cache_async    ： swap_state.c :  302 
+		（主要 视为了 预读  一些page ， 显然 预读属于 异步读 ）
+		
+换出页面
+	同步
+		try_to_free_pages
+	异步
+		kswapd     kernel thread 
+
+
+pageout 使用的是  mapping->a_ops->writepage() 来调用 shmem
+
+shrink_page_list  调用 pageout
+
+shrink_inactive_list  调用 shrink_page_list
+reclaim_clean_pages_from_list 调用  shrink_page_list
+
+
+shrink_list 调用  shrink_inactive_list
+
+shrink_zone 调用  shrink_list
+mem_cgroup_shrink_node_zone  调用   shrink_list
+
+shrink_zones  调用  shrink_zone  (   这条是  direct reclaim path  )
+kswapd_shrink_zone    调用  shrink_zone
+__zone_reclaim   调用   shrink_zone
+
+
+do_try_to_free_pages   调用  shrink_zones 
+
+
+get_page_from_freelist    调用了  __zone_reclaim  (  向伙伴系统请求分配页面  )
+
+
+try_to_free_pages   调用  do_try_to_free_pages
+try_to_free_mem_cgroup_pages   调用  do_try_to_free_pages
+shrink_all_memory   调用   do_try_to_free_pages
+
+
+
+free_more_memory   调用   try_to_free_pages
+__perform_reclaim    调用   try_to_free_pages 
+(  __perform_reclaim   perform   direct synchronous  page reclaim )
+
+
+alloc_page_buffers   调用   free_more_memory
+__getblk_slow   调用   free_more_memory
+
+
+alloc_page_vma 和 alloc_pages_current   一层层调用到了   __perform_reclaim  
+alloc_pages_current   就是  alloc_pages
+
+
+
+
+
+++++++以上是一些调用路径
+
+kswapd  ->  balance_pgdat   -> kswapd_shrink_zone ->   shrink_zone
+
+
+
+
+lru_add_drain()  函数的功能   ？？？？？？ 
+
+
+
+3128   kswapd
+
+--------------------------------------------------------
+
+换入页面 
+
+swap_witepage
+
+read_swap_cache_async   调用了  swap_writepage
+
+
+
+
+
+ondemand_readahead   - >   __do_page_cache_readahead
+
+page_cache_sync_readahead    调用   ondemand_readahead
+
+page_cache_async_readahead    调用   ondemand_readahead
+
+
+(   换如页面的时候应该不需要，添加什么处理了。因为本来的uksm机制就已经可以支持读取的时候去将页面分离出来。所以我只要负责在swap  out的时候 去控制就行了  )
+
+
+
+
+2014-3-15 and   3-16
+了解如何进行唤醒
+
+wake_up_interruptible(  & uksm_thread_wait) ;
+
+mutex_lock(  &uksm_thread_mutex  ) ;
+这里的  uksm_thread_mutex 保护的是 uksm_run 这个变量
+
+
+
+2014-3.17
+
+smp 状态下，如果uksm 正在运行 我这时显然是不用再 wake_up的。 是不是  uksm 和  frontswap_store 的代码路径上有没有锁是重叠的，就是说是不是 实际上 uksm和 frontswap本就不能同时运行的（由于锁互斥）
+
+2014-3.18
+原来的 uksmd 的睡眠是使用了  schedule_timeout_interrupt(  )，如果我中间采用了 wake_up_process()  来唤醒，那么到了时间（timeout)时会发生什么，那个进程已经进入就绪态了呀
+
+2014-3.19
+阅读了   schedule_timeout_interrupt 和  wake_up_process
+感觉   schedule_timeout   就是 在内核栈里面建一个timer 结构，然后激活它，反正这个进程睡眠了，而它被唤醒时这个时钟又刚好不需要了，所以在 schedule_timeout  函数里，最后又将它销毁
+    这样的好处我觉得是不用再申请内存，避免了更进一步的枷锁与检查
+    这个理解让我觉得  使用  wake_up_process()  来唤醒uksm，应该没有问题
+
+2014-3.20  
+添加了一个   uksm_frontswap_wait 的  wait queue ，但是 我在内核代码中没有找到过类似使用的     wait queue 的用法 ， 就是  extern   DECLARE_WAIT_QUEUE() ;   然后在另一个 .c 中使用。
+
+看到了三个  例子，打算看一下
+
+kernel/printk/printk.c 		log_wait 
+kernel/power/swapend.c	syspend_freeze_wait_head
+mm/swapfile.c       			proc_poll_wait
+
+2013-3-21 
+今天早上发现   log_wait 是有声明的 ，在 /proc/kmsg.c    有
+extern wait_queue_head_t    log_wait
+
+
+wait_event_interrptible  调用了  __wait_event_interruptible 
+
+在 __wait_event_interruptible  里面 有一个循环，用来在每次醒来时检查条件是否满足了，如果没有那么就继续去睡眠，睡眠它用的的  prepare_to_wait  函数。
+prepare_to_wait  功能是   把一个   wait_queue_t   和 wait_queue_head_t  关联起来
+
+
+linxu kernel sys request
+
+	     3-21 谈话记录
+	在两便唤醒时可能会出现wake up lost，仔细想好
+
+
+2014-3.24
+
+现在debian的新内核已经可以上网了，原因是我少编进去一个驱动
+
+碰到了   一个  oops 
+ NX-protected page - exploit attempt 
+第一次在系统启动时就发生了，第二次在 我运行 ./run.sh 时出发的。还没有调试
+
+2014-3-25
+今天没有任何进展，还没有成功复原出bug 的位置
+
+
+2014-3-26
+好吧，我先凑一点工作成果吧
+TASK_RUNNING     		0
+TASK_INTERRUPTIBLE    1
+TASK_UNINTERRUPT      	2
+__TASK_STOPPED    		4
+__TASK_TRACED		8
+
+
+2014-3-27
+出错的函数应该  和 generic_exec_single 离得比较近 ， 其他的不清出，待我仔细看下这个函数
+/linux-3.11/arch/x86/include/asm/spinlock.h:54
+
+
+
+
+待做事情
+oops 原因
+lock ，wake up lost 
+
+2014-3-29
+list_for_each_entry_safe
+在finish_wait中 调用的回调函数， 会调用 try_to_wake_up
+
+
+2014-3-31
+可能是这里出了问题：
+_raw_spin_unlock_irqrestore  -> __raw_spin_unlock_irqstore
+但这个是个内联函数啊
+
+
+我尝试在 每次调用的时候首先检查一下  task_list 是否为空，发现第二次task_list 为非空时调用wake_up就会出错。
+猜想   1.  是不是一个进程在队列里面被 wake_up 两次就会出错
+
+我需要看一下，wake_up_common会做点什么，还有就是出错的栈里面wake_up_common 已经过掉了啊
+
+我来加一个点断点，来监控一下   task_list 的值吧
+
+watch  uksm_frontswap_wait.task_list.next
+prepare_to_wait    :75  
+
+
+__ticket_spin_unlock
+
+没有想明白。。。。。还是用git 保存一下吧
+我发现每次出错时那个   __wake_up_common 的地址都在栈当中，所以要不就是跳转错了， 也就是 wake_up_common 中的那个   那个回调函数的位置错了，要不就是在 在wake_up_common中某个栈指针出错了
+
+
+关于  finish_wait 的作用，我觉得优异部分是如果进程是由于timer 唤醒的，那么就因该把它从队列里面拿出来，所以finish_wait要检查一下wait_queue_t是否是empty 
+
+
+我发先   wait_queue_t 中的 func  的函数指针被修改了 ，可是还是不知到在哪里修改的，就是在这里这个
+
+p (unsigned long)(&((wait_queue_t *)0)->task_list)   找到偏移量
+p uksm_frontswap_wait
+p ((wait_queue_t *)0xffff880003b55590)->func 
+输出发现就是 那个  要错误执行的代码位置
+
+先git commit 存档吧
+
+下次就是要找出是哪里错误修改了
+
+
+2014-4-1
+今天先继续做下去
+思考解决 处理wake_up_lost的问题
+lock ，wake up lost 
+（即验证所有的都被睡眠进程都被唤醒）
+
+
+2014-4-2
+打印睡眠的时间，和唤醒的时间
+git reset 碰到了点问题，我新建了一个分支，救国原来的代码没了
+
+
+2014-4-3
+git 的小问题解决了。
+
+
+要测试一下，当uskm_frontswap_wait 发生改变的时候，看一下  autoxxxx  函数的地址，在 Oops 的时候再检查一下，来确认一下是不是被修改了（肯定被改了，不然也不会是0x01,0x00 之类）
+
+
+
+2014-4-5
+这个是网络的部分，我没有添加
+
+391 +CONFIG_FUSION_SPI=y           important
+
+突然 有点问题，就是 如果这个页面已经被我 uksm 替换掉了，那么我还会继续进行下面的 
+frontswap_store
+要好好想想，总之暂时这样没出过问题
+
+
+2014-3-7
+现在更加无法理解原来的问题了。。。。
+finish_wait 主要是用来防止 没有进入schedule
+但我每次都是被唤醒的啊
+
+
+可以发现   uksm 可以触发到    swap_writepage 这点上来，以前我都没注意过，怎么能自己唤醒自己呢，感觉有问题。。。。
+
+
+所有等待的进程应该使用  INTERRUPTIBLE    还是  UNINTERRUPTIBLE  ，我使用的是   INTERRUPTIBLE 还没有理由
+
+
+
+2014-3-10
+
+在uksm的上下文环境中可以进入    swap_writepage
+
+
+#0  swap_writepage (page=0x38, wbc=0xd0) at mm/page_io.c:246
+#1  0xffffffff811955d6 in swapin_readahead (entry=..., gfp_mask=175975040, vma=0x0, addr=131290)
+ at mm/swap_state.c:483
+#2  0xffffffff8118251f in do_swap_page (orig_pte=..., flags=168, pmd=0xffff880005bfb298, address
+=140282397796992, vma=0xffff8800001bf2c0, mm=0xffff880003a0aa00, page_table=<optimized out>) at
+mm/memory.c:3068
+#3  handle_pte_fault (flags=168, pmd=0xffff880005bfb298, pte=<optimized out>, address=1402823977
+96992, vma=0xffff8800001bf2c0, mm=0xffff880003a0aa00) at mm/memory.c:3693
+#4  __handle_mm_fault (flags=168, address=140282397796992, vma=0xffff8800001bf2c0, mm=0xffff8800
+03a0aa00) at mm/memory.c:3811
+#5  handle_mm_fault (mm=0xffff880003a0aa00, vma=0xffff8800001bf2c0, address=140282397796992, fla
+gs=168) at mm/memory.c:3834
+#6  0xffffffff81784f9f in __do_page_fault (regs=0xffff8800071e1f58, error_code=4, address=140282
+397796992) at arch/x86/mm/fault.c:1208
+#7  0xffffffff8178537b in do_page_fault (regs=0xffff8800071e1f58, error_code=4) at arch/x86/mm/f
+ault.c:1267
+#8  <signal handler called>
+#9  0x00007f960a57d138 in ?? ()
+#10 0x007e7d7c7b000000 in ?? ()
+#11 0x0000000000406bad in ?? ()
+#12 0x0000000000000000 in ?? ()
+
+
+
+关于当前不需要使用锁的理由
+finish_wait 的功能 使用来处理
+
+使用锁可以保护运行信息
+
+
+2014-4-11 
+谈话记录，
+
+在finish_wait 中添加一行，加断点调试
+参考其他内核代码，看别人怎么使用schedule , finish_wait(remove_waitlist)
+
+学习一下驱动上下文  preempt_count
+
+检查判断  page是否被uksm
+
+继续向下写
+
+2014-4-12
+
+关于 在 try_to_wake_up 中是否把task_struct 中的 进程状态修改为
+TASK_RUNNING，
+
+ttwu_do_wakeup  中   kernel/sched/core.c
+
+p->state = TASK_RUNNING
+
+
+p->sched_class->task_waken( )  不知到是干嘛的，看名字感觉有关系
+
+2014-4-14
+
+昨天出去玩了，今天要好好学习
+
+首先找到 uksm 中用什么API 来检查该页面有没有被 uksm 合并掉
+有一个 get_uksm_page 的函数，不过第一个参数要 传入  stable node
+
+感觉在调用 page_hash 的是偶应该有验证吧
+replace_page 感觉也很可疑   
+
+
+我觉得设置了 页面 已经被合并了的是   在 patch line 3233 ， 函数set_page_stable_node    ，  如果是这样的话，那么 用来 验证页面是否已经 被uksm 唤醒就该用  PageKsm 了
+
+还有 在检查页面是否 被合并的时候，是不是该枷锁
+trylock_page , lock_page  ?   unlock_page， 因为在 set_page_stable_node 是在锁里面的。
+
+扫了一边  patch  到了 第3000 行 
+
+2014-4-15
+我发现确实有页面 会被  uksm 住。。。。但是 暂时还不了解为什么会重新登录（ init 进程 挂掉了）
+
+2014-4-17  
+我发现  用原来的内核  运行很多次，只会出发   OOM（out of memory killer），而使用了现在的内核以后 就会出发  lowmemorykiller
+
+
+
+2014-4-19  -   2014-4-20  2014-4-21
+
+（一）阅读    读写信号量
+
+down_read
+
+up_read
+ in file   kernel/rwsem.c
+
+这个是在  rw_semaphore 上面的 一段注释
+* the rw-semaphore definition
+* - if activity is 0 then there are no active readers or writers
+* - if activity is +ve then that is the number of active readers
+* - if activity is -1 then there is one active writer
+* - if wait_list is not empty, then there are processes waiting for the semaphore
+
+自旋锁
+
+
+
+
+
+（二）阅读 shrink_page_list  里面的流程 以及 如何枷锁
+
+cond_resched()
+中  
+should_resched()    !(preempt_count() & PREEMPT_ACTIVE && need_resched() 
+
+
+add_preempt_count()
+schedule()
+sub_preempt_count() 
+就是说，他会  在 禁止抢占的条件下睡眠
+
+
+page_mapping(  ) 
+中
+page_swapcache  的判断 页面  是什么 属性  ?
+为什么   mapping  &  PAGE_MAPPING_ANNO 为真，mapping 返回 NULL
+
+
+page_has_private   注释没看懂，  determine if page has stuff 
+
+总之要把没必要？？？ 的页面 交换，压缩 pageout() ， 从而节约出部分页面  
+
+
+这句话感觉很有用，可惜我还没懂 ， 取自  include/linux/mm.h
+* What counts for a page usage:
+* - cache mapping   (page->mapping)
+* - private data    (page->private)
+* - page mapped in a task's page tables, each mapping
+* is counted separately
+
+
+
+（三）最后开始写  临界区代码
+
+为什么要在两个地方定义读写信号量？
+
+
+
+其实我需要使用自旋锁，然后 模仿 读写锁 的实现 来做现在这个临界区代码
+由于我使用了自旋锁，所以不需要wait_list  
+
+
+临界区代码  和 uksm的参数调整
+
+怎么检查uksm 正在运行，有没有原来的机制可以用于检查
+
+wake_up_process 会不会schedule
+（ __ticket_spin_lock() ）
+
+我的标志位是  -1感觉没有什么作用，就是标识uksm已经被唤醒了，应该正在运行
+
+标志位　-1 可以标识uksm 正在运行，所有但前不能修改参数
+
+
+使用xchr 来优化（简化）枷锁流程
+参考系统原来的加锁过程　　
+rw_semaphore    - > 还是会进入 raw_spin_lock_irqsave 
+在 __ticket_spin_trylock 中发现了这个　　cmpxchg 函数（宏）　在arch/x86/include/asm/spinlock.h
+
+
+cmpxchg 的功能就是 如果a , b 相等，那么换成 c 
+
+我需要模仿的应该就是 raw_spin_lock 和 raw_spin_unlock 的实现 
+
+在__ticket_spin_lock 中，使用了 xaddr ，这个宏，非常的厉害，它把两个变量合在了一起，当作一个数来加，这样就可以实现一条指令来完成临界区的所有操作。
+我之前一直有这种困惑，就是把两个数字按照位来合并，会不会出现低位的数字进位影响高位的情况，后来仔细看了下内核代码，发现当增加地位
+
+
+
+
+latex
+/usr/local/texlive/2013/index.html
+
+
+2014-4-28
+添加完了　加锁代码，我在想应不应该加上preempt_disable()。
+
+自旋锁  __raw_spin_lock_irqsave  的位置上有
+local_irq_save(flags)
+preempt_disable() 
+
+
+
+2014-4-29
+
+ema   4180   为了使得评估时间不会突变太多
+
+
+
+
+tmux 的使用
+启动  tmux -2
+
+C + b    控制模式
+%  左右分栏
+"     上下分栏
+c    创建窗口
+n,p   窗口间切换
+o,或者方向键    窗口内部小窗口之间切换 
+x     关闭当前的小窗口
+w    通过上下键来选择哪个会话
+
+复制粘贴，　
+C + b [  进入复制模式，空格开始选择，enter结束选择，C + b ]粘贴
+
+
+2014-5-1
+uksm_do_scan  
+
+
+
+KSM (kernel samepage merging) 
+memory de-duplication ksm
+
+
+Amdahl定律   任何计算系统都一定存在着某个瓶颈
+
+
+
+二次筛选：
+
+[1] A. Arcangeli, I. Eidus, and C. Wright. Increasing memory density by
+using KSM. In OLS ’09: Proceedings of the Linux Symposium, July
+2009.
+
+[9] I. Eidus. How to use the kernel samepage merging feature, 2009.
+Documentation/vm/ksm.txt in Linux Kernel v3.0.
+
+[23] VMware, Inc. ESX Server 3.0.1 Resource Management Guide, 2011.
+
+
+
+
+
+
+我觉得是可以使用的
+Improving Application Performance
+through Swap Compression       B 类
+
+
+Swap Compression: Resurrecting Old Ideas
+ IEEE Transactions on Cybernetics　Ｂ类
+
+The Compression Cache: Using On-line Compression
+to Extend Physical Memory　1993 Winter USENIX Conference
+
+
+Kuniyasu Suzaki, Kengo Iijima, Toshiki Yagi, Cyrille Artho. "Memory Deduplication as a Threat to the Guest OS".　　　
+
+
+
+
+
+2014-5-4
+运行时的参数
+
+cpu_ratio[]		-------    rung->cpu_ratio
+cover_msecs[]	-------    rung->cover_msecs
+max_cpu          	-------    max_cpu
+uksm_sleep_jiffies     
+uksm_sleep_time  
+
+如果是当前uksm正在运行的时候，发生了唤醒　uksmd，那么我到底是不是应该在本次 uksmd 执行完的时候就唤醒呢？　这个时候是否要设置参数
+
+
+在uksmd 中进行参数转储
+
+cpu_ratio_to_usecs
+还有　ksm_should_run()   锁的问题
+sleep 时间的问题
+
+论文文献
+4202        3566
+
+
+Dblp
+减少　　冗余度。。。
+当前　代表作
+独立设计
+不能协同工作
+我的工作
+
+byobu
+
+
+rc3.d / T40gdm3
+
+
+2014-5-8
+经常触发　lowmemorykiller，这个是它的调用栈
+
+#0  printk (fmt=0xffffffff81afd998 "\001\066lowmemorykiller: send sigkill to %d (%s), adj %hd, size %d\n") at kernel/p
+rintk/printk.c:1680
+#1  0xffffffff8164fa31 in lowmem_scan (s=<optimized out>, sc=0xffff88000584dda0) at drivers/staging/android/lowmemoryk
+iller.c:158
+#2  0xffffffff81166b10 in shrink_slab_node (shrinkctl=0xffff88000584dda0, shrinker=0xffffffff81cceb40, nr_pages_scanne
+d=32, lru_pages=6857) at mm/vmscan.c:305
+#3  0xffffffff81168eda in shrink_slab (shrinkctl=0xffff88000584dda0, nr_pages_scanned=32, lru_pages=6857) at mm/vmscan
+.c:374
+#4  0xffffffff8116caf4 in kswapd_shrink_zone (nr_attempted=<synthetic pointer>, lru_pages=6857, sc=0xffff88000584dd58,
+ classzone_idx=1, zone=0xffff880007ffb6c0) at mm/vmscan.c:2895
+#5  balance_pgdat (pgdat=0xffff880007ffb000, order=0, classzone_idx=0xffff88000584de84) at mm/vmscan.c:3075
+#6  0xffffffff8116ce8f in kswapd (p=<optimized out>) at mm/vmscan.c:3283
+#7  0xffffffff8108df49 in kthread (_create=<optimized out>) at kernel/kthread.c:207
+#8  <signal handler called>
+#9  0x0000000000000000 in ?? ()
+
+其实我现在主要不能理解的是这样子的，我开了图形界面，现在呢，原来我只用了128M，新的内核swap的非常慢，现在我开了256M，新的内核跑的比较稳定，同时swap也能够正常了
+
+
+
+填表格
+xxx			图形		字符		开了swap的图形		字符
+2.6			2381556K	98376K		0k						112K
+3.14 原来	
+3.14 修改				108012k	231884k				0k
+
+
+从上面可以看书原来开了128M的确是内存不太够。。。。所以可能是都没有办法支持内核进行正常的内存交换（swap）
+
+
+先测一组数据　是打开pdf ，用来说明真的压缩了。。。。
+kkkkkkkkkkkkkkkkkkjjj
+pdf1 ch7	232000k  1824k
+				233000K  19652k
+pdf2 ch8.1
+pdf3 ch8.2	
+pdf4  ch9	
+
+
+参数如何调整
+
+相关参数：　空闲内存百分比
+
+echo 0 / proc/sys/kernel/hung_task_timeout_secs disable this message
+task evince blocked more than 120s
+
+
+
+2014-5-9
+时间快要来不及了
+
+page_to_scan
+
+sample 
+cover time 包含了　多次唤醒　和　睡眠。
+调整 covertime 来调整本次扫面不同　rung_scan 的页面数量
+调整睡眠时间来调整　扫描的batch之间不会睡眠
+round_finish 判断条件
+
+
+
+
+我的做法，是允许睡眠，但是提供一个cpu_ratio，来保证这段时间内uksm扫描的节奏比较高
+
+
+
+
+2014-5-11
+
+刚刚在写论文的时候才发现，原来还说过要区分zswap的两条调用路径的，现在也完全没有实现
+
+2014-5-12
+今天看了一下
+我没游看出来哪里引用了　rung->current_offset 
+其次我要看在uksm_do_scan　里面是如何判断当前的rung扫描结束的
+总的标记是  round_finished ，这个变量是uksm的局部变量，但是每次都会给uksm_eval_round ，可以使用这个变量来记录
+
+
+round_update_ladder 会在所有的rung 的 finish 了以后，就是这个round finish　，然后就会重新开始扫描
+
+其中，每个如果一个rung　没有变化，下次应该是不会扫描的，不过这个逻辑我没有看到
+
+2014-5-14
+
+突然很好奇，当一个页面已经被放入lrm 中的时候，active_page_list，iractive_page_list，是不是进程的页表已经被修改了，下次读写需要触发 page_fault （答辩完要来好好研究下）
+
+uksm_vma_add_new   在dup_mmap中
+uksm_remove_vma    remove_vma      mmap.c   , vma_adjust   mmap.c
+
+
+
+新创间的vma 可能已经被释放掉了
+统计vma 还要加新的锁？我觉得可以用原子指令
+
+
+
+
+2014-5-22 
+今晚终于有了久违的进展，　lowmemorykiller 在　CONFIG_LOW_MEORY_xxx，要记住把所有的staging都关了，默认打开了所有的drivers/staging的内容　　太坑了
+
+
+
+作图：
+CPU 占用情况
+内存情况
+
+
+
+
+比较CPU占用情况，　内存和swap的占用情况，高CPU负荷的benchmark
+
+有zswap 和 uskm  ， uksm_zswap
+
+SPEC  CPU
+
+ 80   
+mem  220   swap  338
+
+
+
+SPEC CPU2000 - benchmark suite designed to evaluate raw cpu and compiler power
+BYTEmark - CPU benchmark suite, reporting CPU/cache/memory, integer and floating-point performance
+
+
+
+
+由于uksm和zswap的机制
+只能先合并，再压缩　　不能先压缩再合并
+应该是我选择了先压再合并
+
+office  visual  画图   
+
+
+
+单核双处理器　和　双核单处理器　的区别
+
+atomic_read() 
+
+这种机制主要实在内存已经紧张时，发挥作用
+
+讨论中，还有周期的问题
+
+
+uksm　这种机制只有在需要swap 的时候才会发挥作用
+
+对内存的研究　，PCM 硬件，软件方法
+
+
+
+
+ppt 中当前的研究成果　　
+
+PCM 　　
+mapreduce
+
+PPT
+
+想做的什么
+现有的工作
+它们的缺陷
+我的工作分成了几个部分
+效果展示
+
+
+gunplot 
+
+
+
+
+micro benchmark   怎么弄
+
+
+
+2014-7.7
+针对毕业设计，
+内存清理不干净的问题：
+1） 第一 申请2G的内存对肉仍然由800M左右没有被清理，事实上，如果我申请0M的内存，智慧占用160M
+2） 仍然由一部分冗余内存被交换到了SWAP，是什么苑应，试图交换的过程应该都会进行等待的，怎么还会交换
+
+
+
+
+2014-7-21
+
+出现了一个错误，uksmd blocked for more than 120 seconds 
+
+ 482.415528]  [<ffffffff8114f880>] ? wait_on_page_read+0x60/0x60
+[  482.416863]  [<ffffffff81760b0d>] io_schedule+0x9d/0x140
+[  482.418064]  [<ffffffff8114f88e>] sleep_on_page+0xe/0x20
+[  482.419247]  [<ffffffff81760fc8>] __wait_on_bit_lock+0x48/0xb0
+[  482.420578]  [<ffffffff8118575c>] ? __page_check_address+0xcc/0x1a0
+[  482.421975]  [<ffffffff8114f99a>] __lock_page+0x6a/0x70
+[  482.423135]  [<ffffffff810ae540>] ? autoremove_wake_function+0x40/0x40
+[  482.424594]  [<ffffffff811a3af8>] scan_vma_one_page+0xfe8/0x1360
+[  482.425933]  [<ffffffff811a3f8b>] uksm_do_scan+0x11b/0x2690
+[  482.427165]  [<ffffffff8175787d>] ? printk+0x67/0x69
+[  482.428288]  [<ffffffff811a6f17>] uksm_scan_thread+0x277/0x320
+[  482.429579]  [<ffffffff811a6ca0>] ? save_uksm_runtime_data+0xb0/0xb0
+[  482.430994]  [<ffffffff811a6ca0>] ? save_uksm_runtime_data+0xb0/0xb0
+[  482.432409]  [<ffffffff8108afa2>] kthread+0xd2/0xf0
+[  482.433494]  [<ffffffff8108aed0>] ? kthread_create_on_node+0x190/0x190
+[  482.434932]  [<ffffffff8176d1bc>] ret_from_fork+0x7c/0xb0
+[  482.436143]  [<ffffffff8108aed0>] ? kthread_create_on_node+0x190/0x190
+
+
+
+
+
+
+ppt 要点：
+
+v2P ， P2M
+
+clock ， 
+通过检查页面的 R/W位，区分。。。。
+为了避免在一轮扫描中占用太多的时间，并且为了公平性，每次全局的扫描由多次进行
+
+Pagesharing
+分为5伦，  由于Xen里面预定义的的  code,data,heap segment 要在12MB 以内，所以根据一篇引用文献，采用了5论
+将hash值按照数据可能的区间，进行区分，每次只统计一个区间内的。每次统计完都要清空hash table
+
+page similarity
+HashSimilarityDector(k,s)
+
+并且这里的hash table是不能清空的
+
+
+compresion
+There is one impotrant interaction between compression and patching: once we compress a page, the page can no longer be used as a reference for a later patched page.
+
+a condition:
+no  page should be compressed until complete cycle of the page sharing code finished.
+
+
+
+没有压缩完全的主要问题是：
+1.页面只有在不够的时候才会触发
+2.连续触发时，经常是不能满足条件，因而没有触发成功
+
+
+
+谈话记录
+1. 寻找 kswap的队也面是否紧缺的判断标准的代码，模仿。参考，实现对页面紧缺时，进行直接
+2. 做一个条件，如果满足，那么走唤醒的流程，如果不满足，那么走直接同步流程，进行 uksm hash ，合并路线
+
+
+
+回答：
+是区分  node 的，每个node 由自己的  kswapd 同时也是根据自己的zone 来判断是否要pageout 
+
+pgdat_balanced   可以检查  一个node 是否balanced
+
+/* Compact all zones within a node */
+compact_pgdat -> __compact_pgdat
+
+查看，单独uksm的结构应该怎么写（假设有一个条件）
+
+
+
+
+
+-------------------------------------------------------------------
+ shmem_writepage   被赋值的两个函数分别是
+shmem_get_inode
+shmem_symlink
+
+到底是哪里给page->mapping 赋值成为 shmem_aops 呢
+
+
+判断有多少可以共用了代码路径
+
+-------------------------------
+vmscan.c : 700 行 说 try_to_unmap 会将那些 被vmlock 锁在内存里面的页面(pinned page)放入 evictable list中的  
+
+需要了解一个下 TTU flags  具体实在哪个变量上的，大概表示着什么意思
+
+会有页面 mapping == 0  ，
+
+在进行了 pageout以后，需要重新进行 trylock_page 
+
+我这里的 anonymous page 应该是不会有 page buffer 的吧
+
+
+下面就是要搞明白uksm 在把页面交换出去的时候做的具体步骤
+
+
+笔记本上的，在 shrink_page_list中，释放的函数在 try_to_unmap 失败 [[SWaP_FAIL]] 中， 调用了 了 try_to_free_swap
+
+try_to_unmap_one 的目的是要把pte 指向 swap_entry
+
+
+mm_take_all_locks() 
+
+
+
+
+	struct page_referenced_arg pra = {
+		.mapcount = page_mapcount(page),
+		.memcg = memcg,
+	};
+	struct rmap_walk_control rwc = {
+		.rmap_one = page_referenced_one,
+		.arg = (void *)&pra,
+		.anon_lock = page_lock_anon_vma_read,
+	};
+
+
+	if (memcg) {
+		rwc.invalid_vma = invalid_page_referenced_vma;
+	}
+
+
+对于 get_rmap_list_entry 相反的 操作课件 sort_rmap_entry_list 
+
+
+cal_positive_negative_costs   这个函数干嘛用的
+
+
+#define SWAP_SUCCESS	0
+#define SWAP_AGAIN	1
+#define SWAP_FAIL	2
+#define SWAP_MLOCK	3
+主要的返回值 还是这个4个值
+
+
+collision 的处理方式， 和  strength 的作用（有转化的那个部分）
+
+
+bad page state in process   pfn:xxxxx
+
+
+
+#define PAGE_FLAGS_CHECK_AT_FREE \
+	(1 << PG_lru	 | 1 << PG_locked    | \
+	 1 << PG_private | 1 << PG_private_2 | \
+	 1 << PG_writeback | 1 << PG_reserved | \
+	 1 << PG_slab	 | 1 << PG_swapcache | 1 << PG_active | \
+	 1 << PG_unevictable | __PG_MLOCKED | __PG_HWPOISON | \
+	 __PG_COMPOUND_LOCK)
+
+
+swapcache

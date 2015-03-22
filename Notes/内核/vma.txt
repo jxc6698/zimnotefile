@@ -1,0 +1,15 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-09-10T17:39:13+08:00
+
+====== vma ======
+Created 星期三 10 九月 2014
+
+
+
+一个vma 有多个 anon_vma指向可以有
+一个anon_vma 关联好多个vma 也可以有
+
+
+RADIUS  协议
+CHAP（Challenge Handshake Authentication Protocol， 质询握手验证协议）认证交互。若采用PAP（Password Authentication Protocol，密码验证协议）认证

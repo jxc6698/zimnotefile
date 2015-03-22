@@ -1,0 +1,28 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2013-11-10T19:38:14+08:00
+
+====== swap entry的格式 ======
+Created Sunday 10 November 2013
+
+
+首先需要认识  struct page 结构
+
+
+
+page ->private   ------          swp_entry_t    t.val
+
+
+swp_entry_t   t.val
+
+32 bit 
+  5    2      sizeof(t.val) - 5 - 2
+|----|---|------------------------------------|
+
+
+
+
+mm
+
+
+

@@ -1,0 +1,29 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-07-07T14:03:11+08:00
+
+====== zone ======
+Created 星期一 07 七月 2014
+
+
+
+each node in memory is described by a pg_data_t which is a typedef for a struct pglist_data.
+
+node  就是  pg_data_t  也是  pglist_data
+
+
+flags 
+typedof enum {
+	ZONE_RECLAIM_LOCKED
+	ZOME_OOM_LOCKED
+	ZOME_CONGESTED
+	ZOME_TAIL_LRU_DIRTY
+	ZOME_WRITEBACK
+} zone_flags_t ;    
+
+
+
+每个zone 都由自己的 lruvec  例如 zone->lruvec
+
+
+

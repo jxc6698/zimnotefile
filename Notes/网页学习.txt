@@ -1,0 +1,13 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-02-23T00:33:31+08:00
+
+====== 网页学习 ======
+Created Sunday 23 February 2014
+
+<form>  </form>
+
+<input type="text">
+<input type="checkbox">
+<input type="radio">
+<input type="submit">

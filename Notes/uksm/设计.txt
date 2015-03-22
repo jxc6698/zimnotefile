@@ -1,0 +1,28 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2014-03-13T13:23:01+08:00
+
+====== 设计 ======
+Created Thursday 13 March 2014
+
+立刻唤醒， 修改参数（调整运行速度）
+
+控制  uksm 运行
+
+判断 当前运行的是否是  kswapd  ，如果是的就暂时 暂停，不是的话，就加快速度
+
+
+
+
+schedule_timeout_interruptible       6047    睡眠的
+可以修改    uksm_rung_ladder[]   
+修改的步骤 可以参考   cpu_ratio_store
+
+
+
+
+
+
+
+
+

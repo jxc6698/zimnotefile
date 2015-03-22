@@ -1,0 +1,90 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2013-10-29T12:24:34+08:00
+
+====== gitpatch ======
+Created Tuesday 29 October 2013
+
+
+2013.7.10    第一个补丁  zbud.c
+commit  4e2e2770b1529edc5849c86b29a6febe27e2f083
+
+2013.7.10   第二个补丁  zswap.c
+commit  2b2811178e85553405b86e3fe78357b9b95889ce
+
+2013.7.10   第三个补丁  add  zswap  Document 
+commit 61b0d76017a50c263c303fa263b295b04e0c68f6
+
+
+在zswap.c 的补丁中，使用了 frontswap_register_ops() 函数，同时没有 保存下原来的值，就是说没有保存下原来指针指向的函数，不知道原来到底有没有机制在用，还有 zswap的内核配置选项是否 是boolean 的，就是zswap是否是可以编译成模块
+
+
+pageout    __generic_file_aio_write() against
+
+compound_head( )      PG_compound
+
+
+
+address   mapping  is NULL 判断  PG_private  PG_private2
+如果是私有的的可能返回 PAGE_KEEP
+或者  PAGE_CLEAN
+
+
+
+mapping->a_ops->writepage  is NULL
+返回  PAGE_ACTIVATE
+!may_write_to_queue 
+返回 PAGE_KEEP 
+
+
+
+
+shrink_page_list
+
+检查  page 是否是 evictable  是否是可以被移走的
+
+
+
+发现page 是 dirty ，在尝试把它写出时，会调用 pageout
+
+
+用于删除文件缓存页
+reclaim_clean_pages_from_list  :  vmscan.c  1059
+
+
+shrink_inactive_list    :   vmscan.c   1358 
+
+
+shrink_list    :   vmscan.c  :   1733
+
+shrink_lruvec      :   vmscan.c    1939
+
+
+-------      shrink_zone      vmscan.c    :     2114
+#ifdef    CONFIG_MEMCG
+-------      mem_cgroup_shrink_node_zone     vmscan.c  :   2557   
+
+shrink_zone
+-------shrink_zones     2220   vmscan.c 
+-------kswapd_shrink_zone      vmscan.c   :   2770
+-------__zone_reclaim    svmscan.c    :   3478     zone_reclaim  :  3568
+
+
+
+
+
+shrink_zones     
+do_try_to_free_pages   :   2327       vmscan.c   
+try_to_free_pages     
+__perform_reclaim     page_alloc.c   :   2236
+
+__alloc_pages_driect_reclaim     page_alloc.c  :  2264    
+__alloc_pages_slowpath      page_alloc.c    :   2391
+
+
+try_to_free_pages    
+
+
+getblk( )       buffer.c    :   1376   
+
+
